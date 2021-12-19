@@ -5,9 +5,11 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <AddForm />
-      <TodoList />
+    <div className="todo-app">
+      <div className="todo-app__content">
+        <AddForm />
+        <TodoList />
+      </div>
     </div>
   );
 }

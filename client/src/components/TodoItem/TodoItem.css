@@ -1,5 +1,6 @@
 .done {
   text-decoration: line-through;
+  order: 5;
 }
 
 .hidden {
