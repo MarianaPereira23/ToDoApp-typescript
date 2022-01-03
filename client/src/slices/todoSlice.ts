@@ -7,6 +7,15 @@ const todoSlice = createSlice({
     addTodo(state, action: PayloadAction<Todo>){
       state.push(action.payload);
     },
+    editTodo(state, action: PayloadAction<Todo>){
+      state.map(task => {
+        if (task.id === action.payload.id) {
+          task.name = action.payload.name;
+          task.description = action.payload.description;
+        }
+        return task;
+      });
+    },
     removeTodo(state, action: PayloadAction<string>) {
       const index = state.findIndex((todo) => todo.id === action.payload);
       state.splice(index, 1);
@@ -21,5 +30,5 @@ const todoSlice = createSlice({
   },
 });
 
-export const { addTodo, removeTodo, toggleTodoStatus } = todoSlice.actions;
+export const { addTodo, editTodo, removeTodo, toggleTodoStatus } = todoSlice.actions;
 export default todoSlice.reducer;
