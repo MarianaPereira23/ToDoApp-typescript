@@ -1,0 +1,11 @@
+.todo-item__edit {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #1E80C1;
+  background-color: transparent;
+  padding: 0.5rem;
+}
+
+.todo-item__edit:hover {
+  cursor: pointer;
+}

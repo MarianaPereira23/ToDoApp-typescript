@@ -2,15 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const todoSlice = createSlice({
   name: "todos",
-  initialState: [
-    {
-      name: 'Walk the dog',
-      description: 'Take the dog for a walk in the park',
-      display: true,
-      id: '1',
-      completed: false,
-    },
-  ] as Todo[],
+  initialState: [] as Todo[],
   reducers: {
     addTodo(state, action: PayloadAction<Todo>){
       state.push(action.payload);

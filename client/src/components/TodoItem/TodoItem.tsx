@@ -2,6 +2,8 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { MyDispatch } from "../../store/store";
 import { toggleTodoStatus } from "../../slices/todoSlice";
+import RemoveButton from '../RemoveButton/RemoveButton';
+import EditButton from '../EditButton/EditButton';
 import './TodoItem.css';
 
 interface Props {
@@ -21,6 +23,7 @@ const TodoItem: React.FC<Props>  = ({ todo }) => {
     <div className={`todo-item ${todo.completed ? 'done' : ''} ${todo.display ? '' : 'hidden'}`} onClick={toggleTodo} role="button">
       <h2 className="todo-item__name">{todo.name}</h2>
       <p className="todo-item__desc">{todo.description}</p>
+      {todo.completed ? <RemoveButton todo={todo} /> : <EditButton todo={todo} />}
     </div>
   );
 };
