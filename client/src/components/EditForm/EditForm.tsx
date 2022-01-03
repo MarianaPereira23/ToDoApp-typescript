@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
@@ -17,6 +17,12 @@ const EditForm = () => {
   const todos = useSelector((state: MyState) => state);
   const todo = todos.find(todo => todo.id === id);
   let taskToEdit:Todo;
+
+  useEffect(() => {
+    if (!todo) {
+      navigate('/');
+    }
+  }, [navigate, todo]);
 
   if (todo) {
     taskToEdit = {
