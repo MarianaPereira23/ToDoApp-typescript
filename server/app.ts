@@ -17,10 +17,11 @@ const hash = async (password: string) => {
 
 app.post('/join', async (req, res) => {
   try {
-    const user: User = req.body.user;
+    const user: User = req.body;
     const dbUser = await getUser(user.email);
     if (dbUser != "Sorry, this user does not seem to exist.") {
-      res.status(400).send('Sorry, a user with that email address already exists')
+      res.send('Sorry, a user with that email address already exists');
+      return;
     }
     user.password = await hash(user.password);
     await addUser(user);
@@ -32,15 +33,17 @@ app.post('/join', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   try {
-    const user: LoginUser = req.body.user;
+    const user: LoginUser = req.body;
     const dbUser = await getUser(user.email);
     if (dbUser === "Sorry, this user does not seem to exist.") {
-      res.status(404).send('Sorry, a user with that email address does not seem to exist');
+      res.send('Sorry, a user with that email address does not seem to exist');
+      return;
     } 
-    if (dbUser && dbUser != "Sorry, this user does not seem to exist."){
+    if (dbUser){
       const validate: boolean = await bcrypt.compare(user.password, dbUser.password);
       if (!validate) {
-        res.status(401).send('Sorry, something is wrong with your credentials')
+        res.send('Sorry, something is wrong with your credentials');
+        return;
       }
       res.status(200).send(dbUser.username);
     }
