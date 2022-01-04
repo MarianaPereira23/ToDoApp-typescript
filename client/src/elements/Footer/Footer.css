@@ -1,0 +1,13 @@
+.footer {
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #cfcfcf;
+}
+
+.footer__name {
+  /* font-weight: lighter; */
+  font-size: 0.8rem;
+}

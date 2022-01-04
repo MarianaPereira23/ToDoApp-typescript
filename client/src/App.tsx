@@ -1,9 +1,10 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import TodoList from './components/TodoList/TodoList';
-import AddForm from './components/AddForm/AddForm';
-import EditForm from './components/EditForm/EditForm';
+import Header from './elements/Header/Header';
+import Login from './elements/Forms/Login/Login';
+import Footer from './elements/Footer/Footer';
 import './App.css';
+// import './old.css';
 
 function App() {
   return (
@@ -11,6 +12,13 @@ function App() {
       <div className="todo-app__content">
         <Routes>
           <Route path="/" element={(
+            <>
+              <Header />
+              <Login />
+              <Footer />
+            </>
+          )} />
+          {/* <Route path="/list" element={(
             <>
               <AddForm />
               <TodoList />
@@ -20,7 +28,7 @@ function App() {
             <>
               <EditForm />
             </>
-          )} />
+          )} /> */}
         </Routes>
       </div>
     </div>
