@@ -24,7 +24,7 @@ app.post('/join', async (req, res) => {
     }
     user.password = await hash(user.password);
     await addUser(user);
-    res.sendStatus(201);
+    res.status(201).send(user.username);
   } catch (err) {
     res.sendStatus(500);
   }
@@ -47,6 +47,6 @@ app.post('/login', async (req, res) => {
   } catch (err) {
     res.sendStatus(500);
   }
-})
+});
 
 app.listen(8000, () => console.log('listening on 8000'));
