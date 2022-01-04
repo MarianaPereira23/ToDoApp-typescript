@@ -4,10 +4,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  bottom: 0;
   background-color: #cfcfcf;
 }
 
 .footer__name {
-  /* font-weight: lighter; */
   font-size: 0.8rem;
 }
