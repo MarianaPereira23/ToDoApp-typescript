@@ -5,3 +5,7 @@ interface Todo {
   display: boolean;
   id: string;
 };
+
+type User = {
+  username: string;
+}
