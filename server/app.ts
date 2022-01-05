@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
+import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
-import { User, LoginUser } from './types';
+import { addList, addListUser } from './listsdb';
+import { User, LoginUser, NewList, List, UserList, ListUser } from './types';
 
 const app = express();
 
@@ -51,5 +53,34 @@ app.post('/login', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+app.post('/lists/create', async (req, res) => {
+  try {
+    const listData: NewList = req.body;
+    const listToAdd: List = {
+      name: listData.name,
+      id: uuidv4(),
+      users: [listData.user]
+    };
+    await addList(listToAdd);
+    const userList: UserList = {
+      name: listToAdd.name,
+      id: listToAdd.id
+    }
+    res.status(201).send(userList);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.put('/list/adduser', async (req, res) => {
+  try {
+    const newListUser: ListUser = req.body;
+    await addListUser(newListUser);
+    res.sendStatus(201);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+})
 
 app.listen(8000, () => console.log('listening on 8000'));
