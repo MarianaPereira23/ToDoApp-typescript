@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import List from '../Forms/List';
 import './Home.css';
 
 interface Props {
@@ -18,6 +19,7 @@ const Home: React.FC<Props> = ({ user }) => {
   return (
     <div className="home-page">
       <h2 className="home-page__user">{user.username}</h2>
+      <List />
     </div>
   );
 };
