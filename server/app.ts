@@ -76,11 +76,16 @@ app.post('/lists/create', async (req, res) => {
 app.put('/list/adduser', async (req, res) => {
   try {
     const newListUser: ListUser = req.body;
+    const dbUser = await getUser(newListUser.email);
+    if (dbUser === "Sorry, this user does not seem to exist.") {
+      res.send('Sorry, a user with that email address does not seem to exist');
+      return;
+    } 
     await addListUser(newListUser);
     res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
   }
-})
+});
 
 app.listen(8000, () => console.log('listening on 8000'));
