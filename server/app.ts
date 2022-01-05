@@ -3,8 +3,8 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
-import { addList, addListUser } from './listsdb';
-import { User, LoginUser, NewList, List, UserList, ListUser } from './types';
+import { addList, deleteList, addListUser, removeListUser } from './listsdb';
+import { User, LoginUser, NewList, List, UserList, ListUser, DeleteList } from './types';
 
 const app = express();
 
@@ -73,6 +73,16 @@ app.post('/lists/create', async (req, res) => {
   }
 });
 
+app.delete('/lists/delete', async (req, res) => {
+  try {
+    const id: DeleteList = req.body;
+    await deleteList(id.id);
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 app.put('/list/adduser', async (req, res) => {
   try {
     const newListUser: ListUser = req.body;
@@ -83,6 +93,16 @@ app.put('/list/adduser', async (req, res) => {
     } 
     await addListUser(newListUser);
     res.sendStatus(201);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.put('/list/removeuser', async (req, res) => {
+  try {
+    const listUserToRemove: ListUser = req.body;
+    await removeListUser(listUserToRemove);
+    res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);
   }

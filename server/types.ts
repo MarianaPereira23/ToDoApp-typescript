@@ -29,3 +29,7 @@ export type ListUser = {
   email: string;
   id: string;
 }
+
+export type DeleteList = {
+  id: string;
+}

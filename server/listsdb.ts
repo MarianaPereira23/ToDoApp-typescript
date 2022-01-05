@@ -19,6 +19,18 @@ export const addList = async (list: List) => {
   }
 };
 
+export const deleteList = async (id: string) => {
+  try {
+    await client.connect();
+    await client.db("todo-typescript").collection("lists").deleteOne({ id });
+    await client.close();
+    return "List Removed";
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error removing this list, please try again later."
+  }
+};
+
 export const addListUser = async (listUser: ListUser) => {
   try {
     await client.connect();
@@ -27,6 +39,21 @@ export const addListUser = async (listUser: ListUser) => {
       return "Sorry, this list does not seem to exist."
     }
     await client.db("todo-typescript").collection("lists").updateOne({ id: listUser.id }, { $push: { users: listUser.email }});
+    await client.close();
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error adding this user to the list, please try again later."
+  }
+};
+
+export const removeListUser = async (listUser: ListUser) => {
+  try {
+    await client.connect();
+    const list = await client.db("todo-typescript").collection("lists").findOne({ id: listUser.id });
+    if (!list) {
+      return "Sorry, this list does not seem to exist."
+    }
+    await client.db("todo-typescript").collection("lists").updateOne({ id: listUser.id }, { $pull: { users: listUser.email }});
     await client.close();
   } catch (err) {
     await client.close();
