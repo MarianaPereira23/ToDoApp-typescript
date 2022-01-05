@@ -42,7 +42,10 @@ const Join: React.FC<Props> = ({ getUser }) => {
         console.log('User exists already');
         return;
       }
-      getUser({username: createdUser.data});
+      getUser({
+        username: createdUser.data.username,
+        email: createdUser.data.email,
+      });
       navigate('/');
     } catch (err) {
       console.log(err);

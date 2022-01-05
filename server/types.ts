@@ -9,6 +9,11 @@ export type LoginUser = {
   password: string;
 };
 
+export type ReturnUser = {
+  username: string;
+  email: string;
+}
+
 export type NewList = {
   name: string;
   user: string;

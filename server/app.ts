@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, addListUser, removeListUser } from './listsdb';
-import { User, LoginUser, NewList, List, UserList, ListUser, DeleteList } from './types';
+import { User, LoginUser, NewList, List, UserList, ListUser, DeleteList, ReturnUser } from './types';
 
 const app = express();
 
@@ -27,7 +27,11 @@ app.post('/join', async (req, res) => {
     }
     user.password = await hash(user.password);
     await addUser(user);
-    res.status(201).send(user.username);
+    const returnUser: ReturnUser = {
+      username: user.username,
+      email: user.email
+    }
+    res.status(201).send(returnUser);
   } catch (err) {
     res.sendStatus(500);
   }
@@ -47,7 +51,11 @@ app.post('/login', async (req, res) => {
         res.send('Sorry, something is wrong with your credentials');
         return;
       }
-      res.status(200).send(dbUser.username);
+      const returnUser: ReturnUser = {
+        username: dbUser.username,
+        email: dbUser.email
+      }
+      res.status(200).send(returnUser);
     }
   } catch (err) {
     res.sendStatus(500);
@@ -63,11 +71,19 @@ app.post('/lists/create', async (req, res) => {
       users: [listData.user]
     };
     await addList(listToAdd);
-    const userList: UserList = {
-      name: listToAdd.name,
-      id: listToAdd.id
-    }
-    res.status(201).send(userList);
+    // const userList: UserList = {
+    //   name: listToAdd.name,
+    //   id: listToAdd.id
+    // }
+    res.sendStatus(201);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/lists/get', async (req, res) => {
+  try {
+    // FIND ALL LISTS FROM EMAIL!!!!
   } catch (err) {
     res.sendStatus(500);
   }

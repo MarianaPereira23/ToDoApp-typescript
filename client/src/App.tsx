@@ -9,7 +9,7 @@ import './App.css';
 // import './old.css';
 
 const App = () => {
-  const [user, setUser] = useState({username: ''});
+  const [user, setUser] = useState({username: '', email: ''});
 
   const getUser = (data: User): void => {
     setUser(data);

@@ -19,7 +19,7 @@ const Home: React.FC<Props> = ({ user }) => {
   return (
     <div className="home-page">
       <h2 className="home-page__user">{user.username}</h2>
-      <List />
+      <List user={user}/>
     </div>
   );
 };

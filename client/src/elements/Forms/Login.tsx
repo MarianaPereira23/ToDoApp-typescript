@@ -40,7 +40,10 @@ const Login: React.FC<Props> = ({ getUser }) => {
         console.log('User does not exist');
         return;
       }
-      getUser({username: loggedUser.data});
+      getUser({
+        username: loggedUser.data.username,
+        email: loggedUser.data.email,
+      });
       navigate('/');
     } catch (err) {
       console.log(err);
