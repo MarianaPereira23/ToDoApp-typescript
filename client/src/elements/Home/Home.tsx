@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import List from '../Forms/List';
+import ListButton from './ListButton';
 import './Home.css';
 
 interface Props {
@@ -35,7 +36,7 @@ const Home: React.FC<Props> = ({ user }) => {
 
   const render = () => {
     if (userLists.length !== 0) {
-      return userLists.map(list => <button className="lists__button" key={list.id}>{list.name}</button>)
+      return userLists.map(list => <ListButton key={list.id} list={list}/>)
     }
   };
 

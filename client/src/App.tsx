@@ -40,6 +40,12 @@ const App = () => {
               <Footer />
             </>
           )} />
+          <Route path="/list/:id" element={(
+            <>
+              <Header user={user}/>
+              <Footer />
+            </>
+          )} />
           {/* <Route path="/list" element={(
             <>
               <AddForm />
