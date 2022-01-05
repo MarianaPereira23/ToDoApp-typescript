@@ -3,8 +3,8 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
-import { addList, deleteList, addListUser, removeListUser } from './listsdb';
-import { User, LoginUser, NewList, List, UserList, ListUser, DeleteList, ReturnUser } from './types';
+import { addList, deleteList, getUserLists, addListUser, removeListUser } from './listsdb';
+import { User, LoginUser, UserEmail, NewList, List, UserLists, ListUser, DeleteList, ReturnUser } from './types';
 
 const app = express();
 
@@ -83,7 +83,19 @@ app.post('/lists/create', async (req, res) => {
 
 app.post('/lists/get', async (req, res) => {
   try {
-    // FIND ALL LISTS FROM EMAIL!!!!
+    const user: ReturnUser = req.body;
+    const lists = await getUserLists(user.email);
+    if (lists === "Sorry, there was an error getting your lists, please try again later.") {
+      res.send(lists);
+      return;
+    }
+    const userLists: UserLists = lists.map(list => {
+      return ({
+        name: list.name,
+        id: list.id
+      });
+    });
+    res.status(200).send(userLists);
   } catch (err) {
     res.sendStatus(500);
   }

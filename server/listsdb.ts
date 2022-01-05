@@ -31,6 +31,18 @@ export const deleteList = async (id: string) => {
   }
 };
 
+export const getUserLists = async (email: string) => {
+  try {
+    await client.connect();
+    const lists = await client.db("todo-typescript").collection("lists").find({ users: email }).toArray();
+    await client.close();
+    return lists;
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error getting your lists, please try again later."
+  }
+}
+
 export const addListUser = async (listUser: ListUser) => {
   try {
     await client.connect();

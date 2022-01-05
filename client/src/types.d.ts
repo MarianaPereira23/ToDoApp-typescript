@@ -10,3 +10,8 @@ type User = {
   username: string;
   email: string;
 }
+
+type List = {
+  name: string;
+  id: string;
+}

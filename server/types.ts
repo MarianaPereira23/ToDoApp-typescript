@@ -9,32 +9,38 @@ export type LoginUser = {
   password: string;
 };
 
+export type UserEmail = {
+  email: string;
+};
+
 export type ReturnUser = {
   username: string;
   email: string;
-}
+};
 
 export type NewList = {
   name: string;
   user: string;
-}
+};
 
 export type List = {
   name: string;
   id: string;
   users: string[];
-}
+};
 
 export type UserList = {
   name: string;
   id: string;
-}
+};
+
+export type UserLists = UserList[];
 
 export type ListUser = {
   email: string;
   id: string;
-}
+};
 
 export type DeleteList = {
   id: string;
-}
+};

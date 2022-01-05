@@ -13,9 +13,7 @@ const App = () => {
 
   const getUser = (data: User): void => {
     setUser(data);
-  }
-
-  console.log(user);
+  };
 
   return (
     <div className="todo-app">

@@ -4,9 +4,10 @@ import './Forms.css';
 
 interface Props {
   user: User;
+  getNewList(name: string): void;
 }
 
-const List: React.FC<Props> = ({ user }) => {
+const List: React.FC<Props> = ({ user, getNewList }) => {
   const [listName, setListName] = useState("");
 
   const handleListName = (e: React.FormEvent<HTMLInputElement>) => {
@@ -22,6 +23,7 @@ const List: React.FC<Props> = ({ user }) => {
         user: user.email
       };
       await axios.post('http://localhost:8000/lists/create', listInfo);
+      getNewList(listName);
       setListName("");
     } catch (err) {
       console.log(err);
