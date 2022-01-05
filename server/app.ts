@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import { addUser, getUser } from './mongo';
+import { addUser, getUser } from './usersdb';
 import { User, LoginUser } from './types';
 
 const app = express();
