@@ -3,6 +3,7 @@
   height: 4rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: absolute;
   top: 0;
   background-color: #c2c2c2;
@@ -12,4 +13,11 @@
   font-weight: lighter;
   font-size: 1.4rem;
   padding-left: 1.5rem;
+}
+
+.header__my-lists {
+  background-color: transparent;
+  border: none;
+  font-size: 1.4rem;
+  padding-right: 1.5rem;
 }

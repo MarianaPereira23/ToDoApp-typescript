@@ -24,21 +24,21 @@ const App = () => {
         <Routes>
           <Route path="/" element={(
             <>
-              <Header />
+              <Header user={user}/>
               <Home user={user}/>
               <Footer />
             </>
           )} />
           <Route path="/login" element={(
             <>
-              <Header />
+              <Header user={user}/>
               <Login getUser={getUser}/>
               <Footer />
             </>
           )} />
           <Route path="/join" element={(
             <>
-              <Header />
+              <Header user={user}/>
               <Join getUser={getUser}/>
               <Footer />
             </>
