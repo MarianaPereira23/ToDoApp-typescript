@@ -19,6 +19,9 @@ const TaskList: React.FC<Props> = ({ user }) => {
     status: "",
     list_id: ""
   });
+  const [pendingTasks, setPending] = useState<Task[]>([]);
+  const [doingTasks, setDoing] = useState<Task[]>([]);
+  const [doneTasks, setDone] = useState<Task[]>([]);
 
   const getNewTask = (task: Task): void => {
     setNewTask(task);
@@ -36,9 +39,19 @@ const TaskList: React.FC<Props> = ({ user }) => {
     getListName()
   }, [id]);
 
+  console.log(pendingTasks);
+  console.log(doingTasks);
+  console.log(doneTasks);
+  
   const getTasks = async () => {
-    // const data = await axios.post('http://localhost:8000/lists/get', user);
-    // setUserLists(data.data);
+    const data = await axios.post('http://localhost:8000/tasks/get', {id});
+    const allTasks: Task[] = data.data;
+    const pending = allTasks.filter(task => task.status === "Pending");
+    const doing = allTasks.filter(task => task.status === "Doing");
+    const done = allTasks.filter(task => task.status === "Done");
+    setPending(pending);
+    setDoing(doing);
+    setDone(done);
   };
 
   useEffect(() => {

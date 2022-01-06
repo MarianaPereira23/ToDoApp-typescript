@@ -5,7 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
 import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
-import { addTask } from './tasksdb';
+import { addTask, getTasks } from './tasksdb';
 
 const app = express();
 
@@ -150,10 +150,31 @@ app.post('/list/get', async (req, res) => {
 
 app.post('/task/create', async (req, res) => {
   try {
-    console.log(req.body);
     const taskToAdd: Task = req.body;
     await addTask(taskToAdd);
     res.sendStatus(201);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/tasks/get', async (req, res) => {
+  try {
+    const {id} = req.body;
+    const tasks = await getTasks(id);
+    if (tasks === "Sorry, there was an error getting your tasks, please try again later.") {
+      res.send(tasks);
+      return;
+    }
+    const listTasks: Task[] = tasks.map(task => {
+      return ({
+        name: task.name,
+        description: task.description,
+        status: task.status,
+        list_id: task.list_id
+      });
+    });
+    res.status(200).send(listTasks);
   } catch (err) {
     res.sendStatus(500);
   }

@@ -18,3 +18,15 @@ export const addTask = async (task: Task) => {
     return "Sorry, there was an error adding this task, please try again later."
   }
 };
+
+export const getTasks = async (id: string) => {
+  try {
+    await client.connect();
+    const tasks = await client.db("todo-typescript").collection("tasks").find({ list_id: id }).toArray();
+    await client.close();
+    return tasks;
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error getting your tasks, please try again later."
+  }
+};
