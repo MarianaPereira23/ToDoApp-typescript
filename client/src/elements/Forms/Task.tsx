@@ -4,10 +4,10 @@ import './Forms.css';
 
 interface Props {
   id: string;
-  getNewTask(task: Task): void;
+  setUpdate(task: string): void;
 }
 
-const Task: React.FC<Props> = ({ id, getNewTask }) => {
+const Task: React.FC<Props> = ({ id, setUpdate }) => {
   const [taskName, setTaskName] = useState("");
   const [descName, setDescName] = useState("");
 
@@ -31,7 +31,7 @@ const Task: React.FC<Props> = ({ id, getNewTask }) => {
         list_id: id
       };
       await axios.post('http://localhost:8000/task/create', taskInfo);
-      getNewTask(taskInfo);
+      setUpdate(taskInfo.name);
       setTaskName("");
       setDescName("");
     } catch (err) {

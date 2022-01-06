@@ -5,7 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
 import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
-import { addTask, getTasks, findTask } from './tasksdb';
+import { addTask, getTasks, findTask, deleteTask } from './tasksdb';
 
 const app = express();
 
@@ -157,6 +157,16 @@ app.post('/task/create', async (req, res) => {
     }
     await addTask(taskToAdd);
     res.sendStatus(201);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.delete('/task/delete/:taskName', async (req, res) => {
+  try {
+    const { taskName } = req.params;
+    await deleteTask(taskName);
+    res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);
   }

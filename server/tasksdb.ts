@@ -45,3 +45,15 @@ export const findTask = async (name: string) => {
     return "Sorry, there was an error getting your task, please try again later.";
   }
 };
+
+export const deleteTask = async (name: string) => {
+  try {
+    await client.connect();
+    await client.db("todo-typescript").collection("tasks").deleteOne({ name });
+    await client.close();
+    return "Task Removed";
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error removing this task, please try again later."
+  }
+}

@@ -14,18 +14,13 @@ const TaskList: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const id: string | undefined = useParams().id;
   const [listName, setListName] = useState("");
-  const [newTask, setNewTask] = useState({
-    name: "",
-    description: "",
-    status: "",
-    list_id: ""
-  });
+  const [updateTasks, setUpdate] = useState("");
   const [pendingTasks, setPending] = useState<Task[]>([]);
   const [doneTasks, setDone] = useState<Task[]>([]);
 
-  const getNewTask = (task: Task): void => {
-    setNewTask(task);
-  };
+  // const getNewTask = (task: string): void => {
+  //   setUpdate(task);
+  // };
 
   const getListName = async () => {
     const data = await axios.post('http://localhost:8000/list/get', {id});
@@ -50,17 +45,17 @@ const TaskList: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getTasks();
-  }, [newTask]);
+  }, [updateTasks]);
 
   const render = (tasks: Task[]) => {
-    return tasks.map((task, i) => <TaskCard key={i} task={task} />)
+    return tasks.map((task, i) => <TaskCard key={i} task={task} setUpdate={setUpdate} />)
   }
 
   return (
     <div className="task-page">
       <h2 className="task-page__list-name">{listName}</h2>
       {id &&
-        <Task id={id} getNewTask={getNewTask}/>
+        <Task id={id} setUpdate={setUpdate}/>
       }
       {pendingTasks.length !== 0 &&
         <>
