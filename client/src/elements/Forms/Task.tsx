@@ -1,7 +1,13 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import './Forms.css';
 
-const Task = () => {
+interface Props {
+  id: string;
+  getNewTask(task: Task): void;
+}
+
+const Task: React.FC<Props> = ({ id, getNewTask }) => {
   const [taskName, setTaskName] = useState("");
   const [descName, setDescName] = useState("");
 
@@ -18,7 +24,16 @@ const Task = () => {
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      console.log('Submited');
+      const taskInfo: Task = {
+        name: taskName,
+        description: descName,
+        status: "Pending",
+        list_id: id
+      };
+      await axios.post('http://localhost:8000/task/create', taskInfo);
+      getNewTask(taskInfo);
+      setTaskName("");
+      setDescName("");
     } catch (err) {
       console.log(err);
     }

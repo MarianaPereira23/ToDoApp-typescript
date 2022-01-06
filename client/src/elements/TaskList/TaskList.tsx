@@ -13,6 +13,16 @@ const TaskList: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const id: string | undefined = useParams().id;
   const [listName, setListName] = useState("");
+  const [newTask, setNewTask] = useState({
+    name: "",
+    description: "",
+    status: "",
+    list_id: ""
+  });
+
+  const getNewTask = (task: Task): void => {
+    setNewTask(task);
+  };
 
   const getListName = async () => {
     const data = await axios.post('http://localhost:8000/list/get', {id});
@@ -26,10 +36,21 @@ const TaskList: React.FC<Props> = ({ user }) => {
     getListName()
   }, [id]);
 
+  const getTasks = async () => {
+    // const data = await axios.post('http://localhost:8000/lists/get', user);
+    // setUserLists(data.data);
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, [newTask]);
+
   return (
     <div className="task-page">
       <h2 className="task-page__list-name">{listName}</h2>
-      <Task />
+      {id &&
+        <Task id={id} getNewTask={getNewTask}/>
+      }
     </div>
   );
 };

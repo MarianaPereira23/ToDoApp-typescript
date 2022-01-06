@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
-import { User, LoginUser, UserEmail, NewList, List, UserLists, ListUser, DeleteList, ReturnUser } from './types';
+import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
+import { addTask } from './tasksdb';
 
 const app = express();
 
@@ -142,6 +143,17 @@ app.post('/list/get', async (req, res) => {
     }
     const listName: string = list.name;
     res.status(200).send(listName);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/task/create', async (req, res) => {
+  try {
+    console.log(req.body);
+    const taskToAdd: Task = req.body;
+    await addTask(taskToAdd);
+    res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
   }

@@ -9,10 +9,6 @@ export type LoginUser = {
   password: string;
 };
 
-export type UserEmail = {
-  email: string;
-};
-
 export type ReturnUser = {
   username: string;
   email: string;
@@ -44,3 +40,10 @@ export type ListUser = {
 export type DeleteList = {
   id: string;
 };
+
+export type Task = {
+  name: string;
+  description: string;
+  status: string;
+  list_id: string;
+}

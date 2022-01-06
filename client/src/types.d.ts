@@ -15,3 +15,10 @@ type List = {
   name: string;
   id: string;
 }
+
+type Task = {
+  name: string;
+  description: string;
+  status: string;
+  list_id: string;
+}
