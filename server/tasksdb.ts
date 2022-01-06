@@ -27,6 +27,21 @@ export const getTasks = async (id: string) => {
     return tasks;
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error getting your tasks, please try again later."
+    return "Sorry, there was an error getting your tasks, please try again later.";
+  }
+};
+
+export const findTask = async (name: string) => {
+  try {
+    await client.connect();
+    const task = await client.db("todo-typescript").collection("tasks").findOne({ name });
+    if (!task) {
+      return "Sorry, that task does not seem to exist.";
+    }
+    await client.close();
+    return task;
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error getting your task, please try again later.";
   }
 };

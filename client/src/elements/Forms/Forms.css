@@ -17,12 +17,17 @@
 
 .login-page__form,
 .join-page__form,
-.home-page__form {
+.home-page__form,
+.task-page__form {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
+}
+
+.task-form {
+  padding: 0 3rem;
 }
 
 .form__label {
@@ -54,6 +59,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#task__button {
+  margin-bottom: 1rem;
 }
 
 .login-page__sign-up,

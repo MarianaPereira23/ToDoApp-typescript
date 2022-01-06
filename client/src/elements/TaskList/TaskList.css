@@ -1,5 +1,5 @@
 .task-page {
-  padding: 4rem 3rem 0;
+  padding: 4rem 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -8,7 +8,21 @@
 }
 
 .task-page__list-name {
-  padding: 4rem 0;
+  padding: 4rem 3rem;
   text-align: center;
   font-size: 1.4rem;
+}
+
+.task-page__section-name {
+  width: 100%;
+  padding-bottom: 0.5rem;
+  padding-left: 3rem;
+}
+
+.task-page__pedding,
+.task-page__doing,
+.task-page__done {
+  width: 100%;
+  padding: 1rem 3rem;
+  background-color: #c0bebe;
 }

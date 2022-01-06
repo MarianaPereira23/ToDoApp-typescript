@@ -1,0 +1,32 @@
+.task-card {
+  background-color: #FFF;
+  border: 0.1rem solid #8C8C8C;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-bottom: 0.5rem;
+}
+
+.task-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-card__name {
+  width: max-content;
+  display: inline;
+  font-size: 1.1rem;
+}
+
+.task-card__remove {
+  background-color: #FFF;
+  border: none;
+  font-size: 1.1rem;
+}
+
+.task-card__description {
+  padding-top: 0.5rem;
+}

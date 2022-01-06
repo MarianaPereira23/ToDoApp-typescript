@@ -5,7 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
 import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
-import { addTask, getTasks } from './tasksdb';
+import { addTask, getTasks, findTask } from './tasksdb';
 
 const app = express();
 
@@ -151,6 +151,10 @@ app.post('/list/get', async (req, res) => {
 app.post('/task/create', async (req, res) => {
   try {
     const taskToAdd: Task = req.body;
+    const task = await findTask(taskToAdd.name);
+    if (task !== "Sorry, that task does not seem to exist.") {
+      return res.send("Sorry, a task with that name already exists");
+    }
     await addTask(taskToAdd);
     res.sendStatus(201);
   } catch (err) {

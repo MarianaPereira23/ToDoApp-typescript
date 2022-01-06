@@ -40,11 +40,11 @@ const Task: React.FC<Props> = ({ id, getNewTask }) => {
   }
 
   return (
-    <form className="home-page__form" onSubmit={handleSubmit}>
+    <form className="task-page__form task-form" onSubmit={handleSubmit}>
       <label className="form__label">Create new task</label>
       <input className="form__input" type="text" placeholder="Task name" value={taskName} required onChange={handleTaskName} />
       <input className="form__input" type="text" placeholder="Task description" value={descName} onChange={handleDescName} />
-      <button className="form__button" type="submit">Add</button>
+      <button className="form__button" id ="task__button" type="submit">Add</button>
     </form>
   )
 }
