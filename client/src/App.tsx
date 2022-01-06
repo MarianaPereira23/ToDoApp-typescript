@@ -4,6 +4,7 @@ import Header from './elements/Header/Header';
 import Home from './elements/Home/Home';
 import Login from './elements/Forms/Login';
 import Join from './elements/Forms/Join';
+import TaskList from './elements/TaskList/TaskList';
 import Footer from './elements/Footer/Footer';
 import './App.css';
 // import './old.css';
@@ -43,6 +44,7 @@ const App = () => {
           <Route path="/list/:id" element={(
             <>
               <Header user={user}/>
+              <TaskList user={user}/>
               <Footer />
             </>
           )} />

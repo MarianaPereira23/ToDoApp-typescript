@@ -1,0 +1,37 @@
+import React, {useState} from 'react';
+import './Forms.css';
+
+const Task = () => {
+  const [taskName, setTaskName] = useState("");
+  const [descName, setDescName] = useState("");
+
+  const handleTaskName = (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setTaskName(e.currentTarget.value);
+  };
+
+  const handleDescName = (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setDescName(e.currentTarget.value);
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      console.log('Submited');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return (
+    <form className="home-page__form" onSubmit={handleSubmit}>
+      <label className="form__label">Create new task</label>
+      <input className="form__input" type="text" placeholder="Task name" value={taskName} required onChange={handleTaskName} />
+      <input className="form__input" type="text" placeholder="Task description" value={descName} onChange={handleDescName} />
+      <button className="form__button" type="submit">Add</button>
+    </form>
+  )
+}
+
+export default Task

@@ -25,14 +25,11 @@ const Home: React.FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
+    if (user.username === '') {
+      return navigate('/login');
+    }
     getUserLists();
   }, [newList]);
-
-  useEffect(() => {
-    if (user.username === '') {
-      navigate('/login');
-    }
-  }, [user]);
 
   const render = () => {
     if (userLists.length !== 0) {

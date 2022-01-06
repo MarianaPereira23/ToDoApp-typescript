@@ -3,7 +3,7 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
-import { addList, deleteList, getUserLists, addListUser, removeListUser } from './listsdb';
+import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
 import { User, LoginUser, UserEmail, NewList, List, UserLists, ListUser, DeleteList, ReturnUser } from './types';
 
 const app = express();
@@ -71,10 +71,6 @@ app.post('/lists/create', async (req, res) => {
       users: [listData.user]
     };
     await addList(listToAdd);
-    // const userList: UserList = {
-    //   name: listToAdd.name,
-    //   id: listToAdd.id
-    // }
     res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
@@ -131,6 +127,21 @@ app.put('/list/removeuser', async (req, res) => {
     const listUserToRemove: ListUser = req.body;
     await removeListUser(listUserToRemove);
     res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/list/get', async (req, res) => {
+  try {
+    const { id } = req.body;
+    const list = await getList(id);
+    if (list === "Sorry, this list does not seem to exist." || list === "Sorry, there was an error finding this list, please try again later.") {
+      res.send(list);
+      return;
+    }
+    const listName: string = list.name;
+    res.status(200).send(listName);
   } catch (err) {
     res.sendStatus(500);
   }
