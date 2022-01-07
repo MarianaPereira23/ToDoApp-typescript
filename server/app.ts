@@ -156,20 +156,21 @@ app.post('/task/create', async (req, res) => {
   try {
     const taskToAdd: Task = req.body;
     const task = await findTask(taskToAdd.name);
-    if (typeof task !== "string") {
+    if (typeof task !== "string" && task.list_id === taskToAdd.list_id) {
       return res.send("Sorry, a task with that name already exists");
     }
     await addTask(taskToAdd);
-    res.sendStatus(201);
+    return res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
   }
 });
 
-app.delete('/task/delete/:taskName', async (req, res) => {
+app.delete('/task/delete/:list_id/:taskName', async (req, res) => {
   try {
+    const { list_id } = req.params;
     const { taskName } = req.params;
-    await deleteTask(taskName);
+    await deleteTask(taskName, list_id);
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);
@@ -180,10 +181,10 @@ app.put('/task/toggle', async (req, res) => {
   try {
     const task: Task = req.body;
     if (task.status === 'Pending') {
-      await toggleTask(task.name, 'Done');
+      await toggleTask(task.name, task.list_id, 'Done');
       return res.sendStatus(200);
     }
-    await toggleTask(task.name, 'Pending');
+    await toggleTask(task.name, task.list_id, 'Pending');
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);

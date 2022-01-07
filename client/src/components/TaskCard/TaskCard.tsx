@@ -18,7 +18,7 @@ const TaskCard: React.FC<Props> = ({ task, setUpdate }) => {
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await axios.delete(`http://localhost:8000/task/delete/${task.name}`);
+    await axios.delete(`http://localhost:8000/task/delete/${task.list_id}/${task.name}`);
     const deleted: string = 'Deleted' + Date.now();
     setUpdate(deleted);
     e.stopPropagation();

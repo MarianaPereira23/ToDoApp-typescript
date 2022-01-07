@@ -46,10 +46,10 @@ export const findTask = async (name: string) => {
   }
 };
 
-export const deleteTask = async (name: string) => {
+export const deleteTask = async (name: string, list_id: string) => {
   try {
     await client.connect();
-    await client.db("todo-typescript").collection("tasks").deleteOne({ name });
+    await client.db("todo-typescript").collection("tasks").deleteOne({ name, list_id });
     await client.close();
     return "Task Removed";
   } catch (err) {
@@ -58,10 +58,10 @@ export const deleteTask = async (name: string) => {
   }
 }
 
-export const toggleTask = async (name: string, status: string) => {
+export const toggleTask = async (name: string, list_id: string, status: string) => {
   try {
     await client.connect();
-    await client.db("todo-typescript").collection("tasks").updateOne({ name }, { "$set" : { status } });
+    await client.db("todo-typescript").collection("tasks").updateOne({ name, list_id }, { "$set" : { status } });
     await client.close();
     return "Task Updated";
   } catch (err) {
