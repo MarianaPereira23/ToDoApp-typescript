@@ -30,7 +30,14 @@ const Task: React.FC<Props> = ({ id, setUpdate }) => {
         status: "Pending",
         list_id: id
       };
-      await axios.post('http://localhost:8000/task/create', taskInfo);
+      const addedData = await axios.post('http://localhost:8000/task/create', taskInfo);
+      if (addedData.data === "Sorry, a task with that name already exists") {
+        // Error message to user!
+        console.log('Task already exists');
+        setTaskName("");
+        setDescName("");
+        return;
+      }
       setUpdate(taskInfo.name);
       setTaskName("");
       setDescName("");

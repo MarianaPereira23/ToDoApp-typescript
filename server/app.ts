@@ -3,7 +3,7 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
-import { addList, deleteList, getUserLists, addListUser, removeListUser, getList } from './listsdb';
+import { addList, deleteList, getUserLists, addListUser, removeListUser, getList, getListByName } from './listsdb';
 import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
 import { addTask, getTasks, findTask, deleteTask, toggleTask } from './tasksdb';
 
@@ -71,6 +71,11 @@ app.post('/lists/create', async (req, res) => {
       id: uuidv4(),
       users: [listData.user]
     };
+    const list = await getListByName(listToAdd.name);
+    console.log(list);
+    if (typeof list !== "string") {
+      return res.send("Sorry, a list with that name already exists");
+    }
     await addList(listToAdd);
     res.sendStatus(201);
   } catch (err) {

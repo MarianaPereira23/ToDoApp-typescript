@@ -87,3 +87,18 @@ export const getList = async (id: string) => {
     return "Sorry, there was an error finding this list, please try again later."
   }
 }
+
+export const getListByName = async (name: string) => {
+  try {
+    await client.connect();
+    const list = await client.db("todo-typescript").collection("lists").findOne({ name });
+    if (!list) {
+      return "Sorry, this list does not seem to exist."
+    }
+    await client.close();
+    return list;
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error finding this list, please try again later."
+  }
+}

@@ -22,7 +22,13 @@ const List: React.FC<Props> = ({ user, getNewList }) => {
         name: listName,
         user: user.email
       };
-      await axios.post('http://localhost:8000/lists/create', listInfo);
+      const addedList = await axios.post('http://localhost:8000/lists/create', listInfo);
+      if (addedList.data === "Sorry, a list with that name already exists") {
+        // Error message to user!
+        console.log('List already exists');
+        setListName("");
+        return;
+      }
       getNewList(listName);
       setListName("");
     } catch (err) {
