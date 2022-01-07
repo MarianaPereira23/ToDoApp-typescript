@@ -8,7 +8,7 @@ import TaskList from './components/TaskList/TaskList';
 import Footer from './components/Footer/Footer';
 import './App.css';
 
-const App = () => {
+const App: React.FC = () => {
   const [user, setUser] = useState({username: '', email: ''});
 
   const getUser = (data: User): void => {
