@@ -57,3 +57,15 @@ export const deleteTask = async (name: string) => {
     return "Sorry, there was an error removing this task, please try again later."
   }
 }
+
+export const toggleTask = async (name: string, status: string) => {
+  try {
+    await client.connect();
+    await client.db("todo-typescript").collection("tasks").updateOne({ name }, { "$set" : { status } });
+    await client.close();
+    return "Task Updated";
+  } catch (err) {
+    await client.close();
+    return "Sorry, there was an error updating this task, please try again later."
+  }
+}

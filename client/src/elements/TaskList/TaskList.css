@@ -19,8 +19,11 @@
   padding-left: 3rem;
 }
 
+.done-section {
+  padding-top: 1rem;
+}
+
 .task-page__pedding,
-.task-page__doing,
 .task-page__done {
   width: 100%;
   padding: 1rem 3rem;

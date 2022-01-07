@@ -8,17 +8,29 @@ interface Props {
 }
 
 const TaskCard: React.FC<Props> = ({ task, setUpdate }) => {
+  const toggleStatus = async () => {
+    await axios.put('http://localhost:8000/task/toggle', task);
+    return setUpdate('Updated');
+  };
+
+  const handleStatusChange = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    await toggleStatus();
+    console.log('Ran this');
+    e.stopPropagation();
+  };
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await axios.delete(`http://localhost:8000/task/delete/${task.name}`);
-    const deleted: string = "Deleted";
-    return setUpdate(deleted);
+    
+    console.log('Ran');
+    return setUpdate('Deleted');
   };
 
   return (
     <div className="task-card">
-      <div className="task-card__top">
+      <div className="task-card__top" onClick={handleStatusChange}>
         <h3 className="task-card__name">{task.name}</h3>
         <button className="task-card__remove" onClick={handleDelete}>X</button>
       </div>

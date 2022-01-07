@@ -18,9 +18,7 @@ const TaskList: React.FC<Props> = ({ user }) => {
   const [pendingTasks, setPending] = useState<Task[]>([]);
   const [doneTasks, setDone] = useState<Task[]>([]);
 
-  // const getNewTask = (task: string): void => {
-  //   setUpdate(task);
-  // };
+  console.log(updateTasks);
 
   const getListName = async () => {
     const data = await axios.post('http://localhost:8000/list/get', {id});
@@ -31,8 +29,8 @@ const TaskList: React.FC<Props> = ({ user }) => {
     if (user.username === '') {
       return navigate('/login');
     }
-    getListName()
-  }, [id]);
+    getListName();
+  }, []);
   
   const getTasks = async () => {
     const data = await axios.post('http://localhost:8000/tasks/get', {id});
@@ -67,7 +65,7 @@ const TaskList: React.FC<Props> = ({ user }) => {
       }
       {doneTasks.length !== 0 &&
         <>
-          <p className="task-page__section-name">Done</p>
+          <p className="task-page__section-name done-section">Done</p>
           <div className="task-page__done">
             {render(doneTasks)}
           </div>
