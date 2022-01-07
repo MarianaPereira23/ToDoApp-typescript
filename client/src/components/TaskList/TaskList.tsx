@@ -62,10 +62,12 @@ const TaskList: React.FC<Props> = ({ user }) => {
         <button className="manage__button" onClick={handleRedirect}><FontAwesomeIcon icon={faArrowLeft} className="button__icon"/></button>
         <button className="manage__button" onClick={toggleDisplay}><FontAwesomeIcon icon={faUsers} className="button__icon"/></button>
       </div>
-      <div className={`task-page__pop-up ${display ? "" : "hidden"}`}>
-        <button className="pop-up__close" onClick={toggleDisplay}>X</button>
-        <ListUser />
-      </div>
+      {id &&
+        <div className={`task-page__pop-up ${display ? "" : "hidden"}`}>
+          <button className="pop-up__close" onClick={toggleDisplay}>X</button>
+          <ListUser id={id} setDisplay={setDisplay}/>
+        </div>
+      }
       <h2 className="task-page__list-name">{listName}</h2>
       {id &&
         <Task id={id} setUpdate={setUpdate}/>

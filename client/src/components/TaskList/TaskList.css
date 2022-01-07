@@ -15,6 +15,7 @@
   padding: 1.5rem 1rem;
   border: 0.1rem solid #8C8C8C;
   border-radius: 0.3rem;
+  z-index: 5;
 }
 
 .pop-up__close {
