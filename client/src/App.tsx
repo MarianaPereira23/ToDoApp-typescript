@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Header from './elements/Header/Header';
-import Home from './elements/Home/Home';
-import Login from './elements/Forms/Login';
-import Join from './elements/Forms/Join';
-import TaskList from './elements/TaskList/TaskList';
-import Footer from './elements/Footer/Footer';
+import Header from './components/Header/Header';
+import Home from './components/Home/Home';
+import Login from './components/Forms/Login';
+import Join from './components/Forms/Join';
+import TaskList from './components/TaskList/TaskList';
+import Footer from './components/Footer/Footer';
 import './App.css';
-// import './old.css';
 
 const App = () => {
   const [user, setUser] = useState({username: '', email: ''});
@@ -48,17 +47,6 @@ const App = () => {
               <Footer />
             </>
           )} />
-          {/* <Route path="/list" element={(
-            <>
-              <AddForm />
-              <TodoList />
-            </>
-          )} />
-          <Route path="/edit/:id" element={(
-            <>
-              <EditForm />
-            </>
-          )} /> */}
         </Routes>
       </div>
     </div>
