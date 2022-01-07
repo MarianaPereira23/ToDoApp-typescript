@@ -29,6 +29,7 @@ export const getUser = async (email: string) => {
     }
     return dbUser;
   } catch (err) {
-    console.log(err);
+    await client.close();
+    return "Sorry, there was an error finding this user, please try again later."
   }
 };

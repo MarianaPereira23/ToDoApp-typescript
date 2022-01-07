@@ -46,7 +46,7 @@ app.post('/login', async (req, res) => {
       res.send('Sorry, a user with that email address does not seem to exist');
       return;
     } 
-    if (dbUser){
+    if (typeof dbUser !== "string"){
       const validate: boolean = await bcrypt.compare(user.password, dbUser.password);
       if (!validate) {
         res.send('Sorry, something is wrong with your credentials');
@@ -72,7 +72,6 @@ app.post('/lists/create', async (req, res) => {
       users: [listData.user]
     };
     const list = await getListByName(listToAdd.name);
-    console.log(list);
     if (typeof list !== "string") {
       return res.send("Sorry, a list with that name already exists");
     }
@@ -157,7 +156,7 @@ app.post('/task/create', async (req, res) => {
   try {
     const taskToAdd: Task = req.body;
     const task = await findTask(taskToAdd.name);
-    if (task !== "Sorry, that task does not seem to exist.") {
+    if (typeof task !== "string") {
       return res.send("Sorry, a task with that name already exists");
     }
     await addTask(taskToAdd);
