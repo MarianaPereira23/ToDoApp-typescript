@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app.ts"
+    "dev": "nodemon app.ts",
+    "socket": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "mongodb": "^4.2.2",
+    "socket.io": "^4.4.1",
     "uuid": "^8.3.2"
   }
 }
