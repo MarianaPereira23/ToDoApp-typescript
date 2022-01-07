@@ -11,14 +11,16 @@ const TaskCard: React.FC<Props> = ({ task, setUpdate }) => {
   const handleStatusChange = async (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     await axios.put('http://localhost:8000/task/toggle', task);
-    setUpdate('Updated');
+    const updated: string = 'Updated' + Date.now();
+    setUpdate(updated);
     e.stopPropagation();
   };
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await axios.delete(`http://localhost:8000/task/delete/${task.name}`);
-    setUpdate('Deleted');
+    const deleted: string = 'Deleted' + Date.now();
+    setUpdate(deleted);
     e.stopPropagation();
   };
 
