@@ -8,35 +8,34 @@ interface Props {
 }
 
 const TaskCard: React.FC<Props> = ({ task, setUpdate }) => {
-  const toggleStatus = async () => {
-    await axios.put('http://localhost:8000/task/toggle', task);
-    return setUpdate('Updated');
-  };
-
-  const handleStatusChange = async (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleStatusChange = async (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    await toggleStatus();
-    console.log('Ran this');
+    await axios.put('http://localhost:8000/task/toggle', task);
+    setUpdate('Updated');
     e.stopPropagation();
   };
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     await axios.delete(`http://localhost:8000/task/delete/${task.name}`);
-    
-    console.log('Ran');
-    return setUpdate('Deleted');
+    setUpdate('Deleted');
+    e.stopPropagation();
   };
 
   return (
     <div className="task-card">
-      <div className="task-card__top" onClick={handleStatusChange}>
-        <h3 className="task-card__name">{task.name}</h3>
-        <button className="task-card__remove" onClick={handleDelete}>X</button>
+      <div className="task-card__left">
+        <input className="task-card__checkbox" type="checkbox" checked={task.status ==="Done" ? true : false} onChange={handleStatusChange} />
       </div>
-      {task.description !== "" &&
-        <p className="task-card__description">{task.description}</p>
-      }
+      <div className="task-card__right">
+        <div className="task-card__top">
+          <h3 className="task-card__name">{task.name}</h3>
+          <button className="task-card__remove" onClick={handleDelete}>X</button>
+        </div>
+        {task.description !== "" &&
+          <p className="task-card__description">{task.description}</p>
+        }
+      </div>
     </div>
   );
 };

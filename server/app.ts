@@ -98,10 +98,10 @@ app.post('/lists/get', async (req, res) => {
   }
 });
 
-app.delete('/lists/delete', async (req, res) => {
+app.delete('/lists/delete/:id', async (req, res) => {
   try {
-    const id: DeleteList = req.body;
-    await deleteList(id.id);
+    const { id } = req.params;
+    await deleteList(id);
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);
@@ -175,7 +175,6 @@ app.delete('/task/delete/:taskName', async (req, res) => {
 app.put('/task/toggle', async (req, res) => {
   try {
     const task: Task = req.body;
-    console.log(task);
     if (task.status === 'Pending') {
       await toggleTask(task.name, 'Done');
       return res.sendStatus(200);

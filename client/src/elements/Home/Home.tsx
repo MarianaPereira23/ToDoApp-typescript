@@ -33,7 +33,7 @@ const Home: React.FC<Props> = ({ user }) => {
 
   const render = () => {
     if (userLists.length !== 0) {
-      return userLists.map(list => <ListButton key={list.id} list={list}/>)
+      return userLists.map(list => <ListButton key={list.id} list={list} getNewList={getNewList}/>)
     }
   };
 

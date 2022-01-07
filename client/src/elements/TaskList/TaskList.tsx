@@ -18,19 +18,10 @@ const TaskList: React.FC<Props> = ({ user }) => {
   const [pendingTasks, setPending] = useState<Task[]>([]);
   const [doneTasks, setDone] = useState<Task[]>([]);
 
-  console.log(updateTasks);
-
   const getListName = async () => {
     const data = await axios.post('http://localhost:8000/list/get', {id});
     setListName(data.data);
   };
-
-  useEffect(() => {
-    if (user.username === '') {
-      return navigate('/login');
-    }
-    getListName();
-  }, []);
   
   const getTasks = async () => {
     const data = await axios.post('http://localhost:8000/tasks/get', {id});
@@ -42,6 +33,10 @@ const TaskList: React.FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
+    if (user.username === '') {
+      return navigate('/login');
+    }
+    getListName();
     getTasks();
   }, [updateTasks]);
 
