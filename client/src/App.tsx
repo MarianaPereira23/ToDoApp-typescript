@@ -21,28 +21,28 @@ const App = () => {
         <Routes>
           <Route path="/" element={(
             <>
-              <Header user={user}/>
+              <Header user={user} getUser={getUser}/>
               <Home user={user}/>
               <Footer />
             </>
           )} />
           <Route path="/login" element={(
             <>
-              <Header user={user}/>
+              <Header user={user} getUser={getUser}/>
               <Login getUser={getUser}/>
               <Footer />
             </>
           )} />
           <Route path="/join" element={(
             <>
-              <Header user={user}/>
+              <Header user={user} getUser={getUser}/>
               <Join getUser={getUser}/>
               <Footer />
             </>
           )} />
           <Route path="/list/:id" element={(
             <>
-              <Header user={user}/>
+              <Header user={user} getUser={getUser}/>
               <TaskList user={user}/>
               <Footer />
             </>

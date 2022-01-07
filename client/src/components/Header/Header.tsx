@@ -4,21 +4,26 @@ import './Header.css';
 
 interface Props {
   user: User;
+  getUser(data: User): void;
 }
 
-const Header: React.FC<Props> = ({ user }) => {
+const Header: React.FC<Props> = ({ user, getUser }) => {
   const navigate = useNavigate();
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleRedirect = () => {
     navigate('/');
   };
 
+  const handleLogout = () => {
+    getUser({username: '', email: ''});
+    navigate('/login');
+  }
+
   return (
     <header className="header">
-      <h1 className="header__title">Task Tracker</h1>
+      <button className="header__title" onClick={handleRedirect}>Task Tracker</button>
       {user.username !== '' &&
-      <button className="header__my-lists" onClick={handleClick}>My lists</button>
+      <button className="header__my-lists" onClick={handleLogout}>Logout</button>
       }
     </header>
   );
