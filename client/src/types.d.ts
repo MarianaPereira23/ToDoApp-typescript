@@ -9,16 +9,27 @@ interface Todo {
 type User = {
   username: string;
   email: string;
+};
+
+type LoginUser = {
+  email: string;
+  password: string;
+};
+
+type JoinUser = {
+  username: string;
+  email: string;
+  password: string;
 }
 
 type List = {
   name: string;
   id: string;
-}
+};
 
 type Task = {
   name: string;
   description: string;
   status: string;
   list_id: string;
-}
+};

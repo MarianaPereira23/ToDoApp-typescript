@@ -7,7 +7,7 @@ import ListButton from './ListButton';
 import './Home.css';
 
 interface Props {
-  user: User;
+  user: User | string;
 }
 
 const Home: React.FC<Props> = ({ user }) => {
@@ -25,9 +25,9 @@ const Home: React.FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
-    if (user.username === '') {
+    if (typeof user === 'string') {
       return navigate('/login');
-    }
+    };
     getUserLists();
   }, [newList]);
 
@@ -39,16 +39,20 @@ const Home: React.FC<Props> = ({ user }) => {
 
   return (
     <div className="home-page">
-      <h2 className="home-page__user">{user.username}</h2>
-      <List user={user} getNewList={getNewList}/>
-      <div className="home-page__lists">
-        {userLists.length !== 0 &&
-          <p>Task lists</p>
-        }
-        {render()}
+    {typeof user !== 'string' &&
+      <>
+        <h2 className="home-page__user">{user.username}</h2>
+        {/* <List user={user} getNewList={getNewList}/>
+        <div className="home-page__lists">
+          {userLists.length !== 0 &&
+            <p>Task lists</p>
+          }
+          {render()}
+        </div> */}
+      </>
+    }
       </div>
-    </div>
-  );
+    );
 };
 
 export default Home;

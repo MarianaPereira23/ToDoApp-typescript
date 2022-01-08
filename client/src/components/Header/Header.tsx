@@ -3,26 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import './Header.css';
 
 interface Props {
-  user: User;
-  getUser(data: User): void;
+  user: User | string;
+  setUser(user: User | string): void;
 }
 
-const Header: React.FC<Props> = ({ user, getUser }) => {
+const Header: React.FC<Props> = ({ user, setUser }) => {
   const navigate = useNavigate();
 
-  const handleRedirect = () => {
-    navigate('/');
-  };
+  const handleRedirect = () => navigate('/');
 
   const handleLogout = () => {
-    getUser({username: '', email: ''});
+    setUser('');
     navigate('/login');
   }
 
   return (
     <header className="header">
       <button className="header__title" onClick={handleRedirect}>Task Tracker</button>
-      {user.username !== '' &&
+      {typeof user !== 'string' &&
       <button className="header__my-lists" onClick={handleLogout}>Logout</button>
       }
     </header>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import './Forms.css';
 
 interface Props {
-  user: User;
+  user: User | string;
   getNewList(name: string): void;
 }
 
@@ -18,19 +18,21 @@ const List: React.FC<Props> = ({ user, getNewList }) => {
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const listInfo = {
-        name: listName,
-        user: user.email
-      };
-      const addedList = await axios.post('http://localhost:8000/lists/create', listInfo);
-      if (addedList.data === "Sorry, a list with that name already exists") {
-        // Error message to user!
-        console.log('List already exists');
+      if (typeof user !== 'string') {
+        const listInfo = {
+          name: listName,
+          user: user.email
+        };
+        const addedList = await axios.post('http://localhost:8000/lists/create', listInfo);
+        if (addedList.data === "Sorry, a list with that name already exists") {
+          // Error message to user!
+          console.log('List already exists');
+          setListName("");
+          return;
+        }
+        getNewList(listName);
         setListName("");
-        return;
       }
-      getNewList(listName);
-      setListName("");
     } catch (err) {
       console.log(err);
     }
