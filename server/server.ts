@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
-import bcrypt from 'bcrypt';
+import { createServer } from "http";
+import * as bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { config } from 'dotenv';
 import { addUser, getUser } from './usersdb';
@@ -9,7 +10,9 @@ import { User, ReturnUser, LoginUser, NewList, List, UserLists, ListUser, Task }
 
 config();
 
-const io = new Server(8080, {
+const httpServer = createServer();
+
+const io = new Server(httpServer, {
   cors: {
     allowedHeaders: ["Access-Control-Allow-Origin", "*"],
     credentials: true
@@ -25,7 +28,9 @@ io.on("connection", (socket: Socket) => {
 
   socket.on('join', async (user: User) => {
     const dbUser = await getUser(user.email);
-    if (typeof dbUser === 'string') {
+    console.log(dbUser);
+    
+    if (typeof dbUser !== 'string') {
       return socket.emit('loginStatus', 'Sorry, a user with that email address already exists');
     };
     user.password = await hash(user.password);
@@ -43,6 +48,8 @@ io.on("connection", (socket: Socket) => {
       return socket.emit('loginStatus', 'Sorry, a user with that email address does not seem to exist');
     };
     const validate: boolean = await bcrypt.compare(user.password, dbUser.password);
+    console.log(validate);
+    
     if (!validate) {
       return socket.emit('loginStatus', 'Sorry, something is wrong with your credentials');
     };
@@ -151,3 +158,5 @@ io.on("connection", (socket: Socket) => {
     socket.emit('tasks', []);
   });
 });
+
+httpServer.listen(8080);
