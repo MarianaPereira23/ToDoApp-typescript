@@ -28,8 +28,6 @@ io.on("connection", (socket: Socket) => {
 
   socket.on('join', async (user: User) => {
     const dbUser = await getUser(user.email);
-    console.log(dbUser);
-    
     if (typeof dbUser !== 'string') {
       return socket.emit('loginStatus', 'Sorry, a user with that email address already exists');
     };
@@ -48,8 +46,6 @@ io.on("connection", (socket: Socket) => {
       return socket.emit('loginStatus', 'Sorry, a user with that email address does not seem to exist');
     };
     const validate: boolean = await bcrypt.compare(user.password, dbUser.password);
-    console.log(validate);
-    
     if (!validate) {
       return socket.emit('loginStatus', 'Sorry, something is wrong with your credentials');
     };
