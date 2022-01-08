@@ -143,31 +143,6 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
-  socket.on('addTask', async (task: Task) => {
-    const dbTask = await findTask(task.name, task.list_id);
-    if (typeof dbTask !== 'string') {
-      return socket.emit('tasks', 'Sorry, a task with that name already exists');
-    };
-    await addTask(task);
-    socket.emit('tasks', task);
-  });
-
-  socket.on('deleteTask', async (name: string, list_id: string) => {
-    await deleteTask(name, list_id);
-    socket.emit('tasks', {});
-  });
-
-  socket.on('toggleTask', async (task: Task) => {
-    if (task.status === 'Pending') {
-      await toggleTask(task.name, task.list_id, 'Done');
-    };
-    if (task.status === 'Done') {
-      await toggleTask(task.name, task.list_id, 'Pending');
-    };
-    const dbTask = await findTask(task.name, task.list_id);
-    socket.emit('tasks', dbTask);
-  });
-
   socket.on('getTasks', async (id: string) => {
     const tasks = await getTasks(id);
     if (tasks && tasks.length > 0) {
@@ -183,6 +158,44 @@ io.on("connection", (socket: Socket) => {
     };
     socket.emit('tasks', []);
   });
+
+  socket.on('addTask', async (task: Task) => {
+    const dbTask = await findTask(task.name, task.list_id);
+    if (typeof dbTask !== 'string') {
+      return socket.emit('tasks', 'Sorry, a task with that name already exists');
+    };
+    await addTask(task);
+    socket.emit('newTask', task);
+  });
+
+  socket.on('deleteTask', async (name: string, id: string) => {
+    await deleteTask(name, id);
+    const tasks = await getTasks(id);
+    if (tasks && tasks.length > 0) {
+      const listTasks: Task[] = tasks.map(task => {
+        return ({
+          name: task.name,
+          description: task.description,
+          status: task.status,
+          list_id: task.list_id
+        });
+      });
+      socket.emit('tasks', listTasks);
+    };
+    socket.emit('tasks', []);
+  });
+
+  socket.on('toggleTask', async (task: Task) => {
+    if (task.status === 'Pending') {
+      await toggleTask(task.name, task.list_id, 'Done');
+    };
+    if (task.status === 'Done') {
+      await toggleTask(task.name, task.list_id, 'Pending');
+    };
+    const dbTask = await findTask(task.name, task.list_id);
+    socket.emit('tasks', dbTask);
+  });
+
 });
 
 httpServer.listen(8080);

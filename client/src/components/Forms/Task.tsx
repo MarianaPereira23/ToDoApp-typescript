@@ -1,50 +1,42 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+import { io, Socket } from "socket.io-client";
 import './Forms.css';
+
+const url = 'http://localhost:8080';
+
+const socket: Socket = io(url);
 
 interface Props {
   id: string;
-  setUpdate(task: string): void;
+  pendingTasks: Task[];
+  setPending(tasks: Task[]): void;
 }
 
-const Task: React.FC<Props> = ({ id, setUpdate }) => {
-  const [taskName, setTaskName] = useState("");
-  const [descName, setDescName] = useState("");
+const Task: React.FC<Props> = ({ id, pendingTasks, setPending }) => {
+  const [taskName, setTaskName] = useState<string>('');
+  const [descName, setDescName] = useState<string>('');
 
-  const handleTaskName = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTaskName(e.currentTarget.value);
-  };
+  socket.on('newTask', (task: Task) => {
+    const newTasks: Task[] = pendingTasks.concat(task);
+    setPending(newTasks);
+  });
 
-  const handleDescName = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setDescName(e.currentTarget.value);
-  };
+  const handleTaskName = (e: React.ChangeEvent<HTMLInputElement>) => setTaskName(e.currentTarget.value);
+
+  const handleDescName = (e: React.ChangeEvent<HTMLInputElement>) => setDescName(e.currentTarget.value);
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const taskInfo: Task = {
-        name: taskName,
-        description: descName,
-        status: "Pending",
-        list_id: id
-      };
-      const addedData = await axios.post('http://localhost:8000/task/create', taskInfo);
-      if (addedData.data === "Sorry, a task with that name already exists") {
-        // Error message to user!
-        console.log('Task already exists');
-        setTaskName("");
-        setDescName("");
-        return;
-      }
-      setUpdate(taskInfo.name);
-      setTaskName("");
-      setDescName("");
-    } catch (err) {
-      console.log(err);
-    }
-  }
+    const taskInfo: Task = {
+      name: taskName,
+      description: descName,
+      status: 'Pending',
+      list_id: id
+    };
+    socket.emit('addTask', taskInfo);
+    setTaskName('');
+    setDescName('');
+  };
 
   return (
     <form className="task-page__form task-form" onSubmit={handleSubmit}>
@@ -53,7 +45,7 @@ const Task: React.FC<Props> = ({ id, setUpdate }) => {
       <input className="form__input" type="text" placeholder="Task description" value={descName} onChange={handleDescName} />
       <button className="form__button" id ="task__button" type="submit">Add</button>
     </form>
-  )
-}
+  );
+};
 
-export default Task
+export default Task;

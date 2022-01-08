@@ -3,58 +3,50 @@ import React, {useState, useEffect} from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
-import axios from "axios";
+import { io, Socket } from "socket.io-client";
 import Task from '../Forms/Task';
 import TaskCard from '../TaskCard/TaskCard';
 import ListUser from '../Forms/ListUser';
+import ListName from './ListName';
 import './TaskList.css';
 
+const url = 'http://localhost:8080';
+
+const socket: Socket = io(url);
+
 interface Props {
-  user: User;
-}
+  user: User | string;
+};
 
 const TaskList: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const id: string | undefined = useParams().id;
-  const [listName, setListName] = useState("");
-  const [updateTasks, setUpdate] = useState("");
   const [pendingTasks, setPending] = useState<Task[]>([]);
   const [doneTasks, setDone] = useState<Task[]>([]);
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState<boolean>(false);
 
-  const getListName = async () => {
-    const data = await axios.post('http://localhost:8000/list/get', {id});
-    setListName(data.data);
-  };
-  
-  const getTasks = async () => {
-    const data = await axios.post('http://localhost:8000/tasks/get', {id});
-    const allTasks: Task[] = data.data;
-    const pending = allTasks.filter(task => task.status === "Pending");
-    const done = allTasks.filter(task => task.status === "Done");
+  socket.on('tasks', (tasks: Task[]) => {
+    const pending: Task[] = tasks.filter(task => task.status === "Pending");
+    const done: Task[] = tasks.filter(task => task.status === "Done");
     setPending(pending);
     setDone(done);
-  };
+    // Infinite loop ? State with only one array ? Display state in another component ?
+  });
 
   useEffect(() => {
-    if (user.username === '') {
+    if (typeof user === 'string') {
       return navigate('/login');
-    }
-    getListName();
-    getTasks();
-  }, [updateTasks]);
+    };
+    socket.emit('getTasks', id);
+  }, []);
 
   const render = (tasks: Task[]) => {
-    return tasks.map((task, i) => <TaskCard key={i} task={task} setUpdate={setUpdate} />)
-  }
-
-  const toggleDisplay = () => {
-    setDisplay(!display);
-  }
-
-  const handleRedirect = () => {
-    navigate('/');
+    return tasks.map((task, i) => <TaskCard key={i} task={task} setPending={setPending} setDone={setDone} />)
   };
+
+  const toggleDisplay = () => setDisplay(!display);
+
+  const handleRedirect = () => navigate('/');
 
   return (
     <div className="task-page">
@@ -68,9 +60,11 @@ const TaskList: React.FC<Props> = ({ user }) => {
           <ListUser id={id} setDisplay={setDisplay}/>
         </div>
       }
-      <h2 className="task-page__list-name">{listName}</h2>
       {id &&
-        <Task id={id} setUpdate={setUpdate}/>
+        <>
+          <ListName id={id}/>
+          <Task id={id} pendingTasks={pendingTasks} setPending={setPending}/>
+        </>
       }
       {pendingTasks.length !== 0 &&
         <>

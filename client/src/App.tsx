@@ -4,7 +4,7 @@ import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import Login from './components/Forms/Login';
 import Join from './components/Forms/Join';
-// import TaskList from './components/TaskList/TaskList';
+import TaskList from './components/TaskList/TaskList';
 import Footer from './components/Footer/Footer';
 import './App.css';
 
@@ -39,7 +39,7 @@ const App: React.FC = () => {
           <Route path="/list/:id" element={(
             <>
               <Header user={user} setUser={setUser}/>
-              {/* <TaskList user={user}/> */}
+              <TaskList user={user}/>
               <Footer />
             </>
           )} />
