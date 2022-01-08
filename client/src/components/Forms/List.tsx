@@ -1,42 +1,38 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+import { io, Socket } from "socket.io-client";
 import './Forms.css';
+
+const url = 'http://localhost:8080';
+
+const socket: Socket = io(url);
 
 interface Props {
   user: User | string;
-  getNewList(name: string): void;
+  userLists: List[];
+  setUserLists(lists: List[]): void;
 }
 
-const List: React.FC<Props> = ({ user, getNewList }) => {
-  const [listName, setListName] = useState("");
+const List: React.FC<Props> = ({ user, userLists, setUserLists }) => {
+  const [listName, setListName] = useState<string>('');
 
-  const handleListName = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setListName(e.currentTarget.value);
-  };
+  socket.on('newList', (list: List) => {
+    const newLists: List[] = userLists.concat(list);
+    setUserLists(newLists);
+  });
+
+  const handleListName = (e: React.ChangeEvent<HTMLInputElement>) => setListName(e.currentTarget.value);
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      if (typeof user !== 'string') {
-        const listInfo = {
-          name: listName,
-          user: user.email
-        };
-        const addedList = await axios.post('http://localhost:8000/lists/create', listInfo);
-        if (addedList.data === "Sorry, a list with that name already exists") {
-          // Error message to user!
-          console.log('List already exists');
-          setListName("");
-          return;
-        }
-        getNewList(listName);
-        setListName("");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
+    if (typeof user !== 'string') {
+      const listInfo: ListToAdd = {
+        name: listName,
+        user: user.email
+      };
+      socket.emit('createList', listInfo);
+      setListName('');
+    };
+  };
 
   return (
     <form className="home-page__form" onSubmit={handleSubmit}>

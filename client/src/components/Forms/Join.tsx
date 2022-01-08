@@ -27,7 +27,7 @@ const Join: React.FC<Props> = ({ user, setUser }) => {
       username,
       email,
       password
-    }
+    };
     join(newUser.username, newUser.email, newUser.password, setUser);
   };
 

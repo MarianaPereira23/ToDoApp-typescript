@@ -67,7 +67,7 @@ io.on("connection", (socket: Socket) => {
       return socket.emit('list', 'You already hava list with that name');
     };
     await addList(listToAdd);
-    socket.emit('lists', listToAdd);
+    socket.emit('newList', listToAdd);
   });
 
   socket.on('getLists', async (user: ReturnUser) => {
@@ -79,14 +79,24 @@ io.on("connection", (socket: Socket) => {
           id: list.id
         });
       });
-      socket.emit('lists', userLists);
+      return socket.emit('lists', userLists);
     };
     socket.emit('lists', []);
   });
 
-  socket.on('deleteList', async (listId: string) => {
+  socket.on('deleteList', async (listId: string, user: ReturnUser) => {
     await deleteList(listId);
-    socket.emit('lists', {});
+    const lists = await getUserLists(user.email);
+    if(lists && lists.length > 0) {
+      const userLists: UserLists = lists.map(list => {
+        return ({
+          name: list.name,
+          id: list.id
+        });
+      });
+      return socket.emit('lists', userLists);
+    };
+    socket.emit('lists', []);
   });
 
   socket.on('addListUser', async (user: ListUser) => {
@@ -95,21 +105,41 @@ io.on("connection", (socket: Socket) => {
       return socket.emit('lists', 'Sorry, a user with that email address does not seem to exist');
     };
     await addListUser(user);
-    socket.emit('lists', {});
+    const lists = await getUserLists(user.email);
+    if(lists && lists.length > 0) {
+      const userLists: UserLists = lists.map(list => {
+        return ({
+          name: list.name,
+          id: list.id
+        });
+      });
+      return socket.emit('lists', userLists);
+    };
+    socket.emit('lists', []);
   });
 
   socket.on('removeListUser', async (user: ListUser) => {
     await removeListUser(user);
-    socket.emit('lists', {});
+    const lists = await getUserLists(user.email);
+    if(lists && lists.length > 0) {
+      const userLists: UserLists = lists.map(list => {
+        return ({
+          name: list.name,
+          id: list.id
+        });
+      });
+      return socket.emit('lists', userLists);
+    };
+    socket.emit('lists', []);
   });
 
   socket.on('getListName', async (id: string) => {
     const list = await getList(id);
     if (typeof list === 'string') {
-      return socket.emit('lists', list);
+      return socket.emit('listName', list);
     };
     if (list) {
-      return socket.emit('lists', list.name);
+      return socket.emit('listName', list.name);
     }
   });
 

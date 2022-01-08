@@ -20,11 +20,16 @@ type JoinUser = {
   username: string;
   email: string;
   password: string;
-}
+};
 
 type List = {
   name: string;
   id: string;
+};
+
+type ListToAdd = {
+  name: string;
+  user: string;
 };
 
 type Task = {

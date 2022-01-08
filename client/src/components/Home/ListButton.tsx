@@ -1,27 +1,26 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { io, Socket } from "socket.io-client";
 import './Home.css';
 
-interface Props {
-  list: List;
-  getNewList(name: string): void;
-}
+const url = 'http://localhost:8080';
 
-const ListButton: React.FC<Props> = ({ list, getNewList }) => {
+const socket: Socket = io(url);
+
+interface Props {
+  user: User | string;
+  list: List;
+  setUserLists(lists: List[]): void;
+};
+
+const ListButton: React.FC<Props> = ({ user, list, setUserLists }) => {
   const navigate = useNavigate();
 
-  const handleRedirect = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    navigate(`/list/${list.id}`);
-  };
+  socket.on('lists', (lists: List[]) => setUserLists(lists));
 
-  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    await axios.delete(`http://localhost:8000/lists/delete/${list.id}`);
-    getNewList('List deleted');
-    e.stopPropagation();
-  };
+  const handleRedirect = () => navigate(`/list/${list.id}`);
+
+  const handleDelete = () => socket.emit('deleteList', list.id, user);
 
   return (
     <div className="lists__button">
