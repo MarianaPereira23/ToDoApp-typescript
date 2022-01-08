@@ -7,6 +7,21 @@ config();
 const uri: string = process.env.DB_CONNECTION ? process.env.DB_CONNECTION : '';
 const client: MongoClient = new MongoClient(uri);
 
+export const findTask = async (name: string, list_id: string) => {
+  try {
+    await client.connect();
+    const task = await client.db("todo-typescript").collection("tasks").findOne({ name, list_id });
+    if (!task) {
+      return "Sorry, that task does not seem to exist.";
+    };
+    await client.close();
+    return task;
+  } catch (err) {
+    await client.close();
+    return;
+  };
+};
+
 export const addTask = async (task: Task) => {
   try {
     await client.connect();
@@ -15,8 +30,8 @@ export const addTask = async (task: Task) => {
     return "Task added";
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error adding this task, please try again later."
-  }
+    return;
+  };
 };
 
 export const getTasks = async (id: string) => {
@@ -27,23 +42,8 @@ export const getTasks = async (id: string) => {
     return tasks;
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error getting your tasks, please try again later.";
-  }
-};
-
-export const findTask = async (name: string) => {
-  try {
-    await client.connect();
-    const task = await client.db("todo-typescript").collection("tasks").findOne({ name });
-    if (!task) {
-      return "Sorry, that task does not seem to exist.";
-    }
-    await client.close();
-    return task;
-  } catch (err) {
-    await client.close();
-    return "Sorry, there was an error getting your task, please try again later.";
-  }
+    return;
+  };
 };
 
 export const deleteTask = async (name: string, list_id: string) => {
@@ -54,9 +54,9 @@ export const deleteTask = async (name: string, list_id: string) => {
     return "Task Removed";
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error removing this task, please try again later."
-  }
-}
+    return;
+  };
+};
 
 export const toggleTask = async (name: string, list_id: string, status: string) => {
   try {
@@ -66,6 +66,6 @@ export const toggleTask = async (name: string, list_id: string, status: string) 
     return "Task Updated";
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error updating this task, please try again later."
-  }
-}
+    return;
+  };
+};

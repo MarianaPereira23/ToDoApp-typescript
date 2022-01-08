@@ -37,10 +37,6 @@ export type ListUser = {
   id: string;
 };
 
-export type DeleteList = {
-  id: string;
-};
-
 export type Task = {
   name: string;
   description: string;

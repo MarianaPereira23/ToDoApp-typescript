@@ -15,8 +15,8 @@ export const addUser = async (user: User) => {
     return "User added";
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error adding this user, please try again later."
-  }
+    return;
+  };
 };
 
 export const getUser = async (email: string) => {
@@ -25,11 +25,11 @@ export const getUser = async (email: string) => {
     const dbUser = await client.db("todo-typescript").collection("users").findOne({ email });
     await client.close();
     if (!dbUser) {
-      return "Sorry, this user does not seem to exist."
-    }
+      return "Sorry, this user does not seem to exist.";
+    };
     return dbUser;
   } catch (err) {
     await client.close();
-    return "Sorry, there was an error finding this user, please try again later."
-  }
+    return;
+  };
 };

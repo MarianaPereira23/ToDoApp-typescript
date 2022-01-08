@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import {v4 as uuidv4} from 'uuid';
 import { addUser, getUser } from './usersdb';
 import { addList, deleteList, getUserLists, addListUser, removeListUser, getList, getListByName } from './listsdb';
-import { User, LoginUser, NewList, List, UserLists, ListUser, DeleteList, ReturnUser, Task } from './types';
+import { User, LoginUser, NewList, List, UserLists, ListUser, ReturnUser, Task } from './types';
 import { addTask, getTasks, findTask, deleteTask, toggleTask } from './tasksdb';
 
 const app = express();
@@ -71,9 +71,9 @@ app.post('/lists/create', async (req, res) => {
       id: uuidv4(),
       users: [listData.user]
     };
-    const list = await getListByName(listToAdd.name);
+    const list = await getListByName(listToAdd.name, listData.user);
     if (typeof list !== "string") {
-      return res.send("Sorry, a list with that name already exists");
+      return res.send("You already hava list with that name");
     }
     await addList(listToAdd);
     res.sendStatus(201);
@@ -86,9 +86,8 @@ app.post('/lists/get', async (req, res) => {
   try {
     const user: ReturnUser = req.body;
     const lists = await getUserLists(user.email);
-    if (lists === "Sorry, there was an error getting your lists, please try again later.") {
-      res.send(lists);
-      return;
+    if (!lists) {
+      return res.sendStatus(200);
     }
     const userLists: UserLists = lists.map(list => {
       return ({
@@ -141,10 +140,13 @@ app.post('/list/get', async (req, res) => {
   try {
     const { id } = req.body;
     const list = await getList(id);
-    if (list === "Sorry, this list does not seem to exist." || list === "Sorry, there was an error finding this list, please try again later.") {
+    if (!list) {
+      return res.sendStatus(200);
+    }
+    if (typeof list === "string") {
       res.send(list);
       return;
-    }
+    };
     const listName: string = list.name;
     res.status(200).send(listName);
   } catch (err) {
@@ -155,8 +157,11 @@ app.post('/list/get', async (req, res) => {
 app.post('/task/create', async (req, res) => {
   try {
     const taskToAdd: Task = req.body;
-    const task = await findTask(taskToAdd.name);
-    if (typeof task !== "string" && task.list_id === taskToAdd.list_id) {
+    const task = await findTask(taskToAdd.name, taskToAdd.list_id);
+    if (!task) {
+      return res.sendStatus(200);
+    }
+    if (typeof task !== "string") {
       return res.send("Sorry, a task with that name already exists");
     }
     await addTask(taskToAdd);
@@ -195,8 +200,8 @@ app.post('/tasks/get', async (req, res) => {
   try {
     const {id} = req.body;
     const tasks = await getTasks(id);
-    if (tasks === "Sorry, there was an error getting your tasks, please try again later.") {
-      res.send(tasks);
+    if (!tasks) {
+      res.sendStatus(200);
       return;
     }
     const listTasks: Task[] = tasks.map(task => {
