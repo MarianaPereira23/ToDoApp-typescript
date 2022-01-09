@@ -1,4 +1,7 @@
 .task-card {
+  width: 100%;
+  max-width: calc(750px - 6rem);
+  margin: 0 auto;
   background-color: #FFF;
   border: 0.1rem solid #8C8C8C;
   border-radius: 0.3rem;

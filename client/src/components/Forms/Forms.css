@@ -2,7 +2,9 @@
 .join-page {
   padding: 4rem 3rem 0;
   width: 100%;
+  max-width: 750px;
   display: flex;
+  margin: 0 auto;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -28,6 +30,8 @@
 }
 
 .task-form {
+  max-width: 750px;
+  margin: 0 auto;
   padding: 0 3rem;
 }
 
@@ -91,6 +95,7 @@
 
 .sign-up__redirect,
 .join__redirect {
+  padding-left: 0.2rem;
   color: #0360CD;
   text-decoration: underline;
   cursor: pointer;

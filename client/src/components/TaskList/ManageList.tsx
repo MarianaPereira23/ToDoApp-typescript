@@ -21,8 +21,12 @@ const ManageList: React.FC<Props> = ({ id, setUserLists }) => {
   return (
     <>
       <div className="task-page__manage">
-        <button className="manage__button" onClick={handleRedirect}><FontAwesomeIcon icon={faArrowLeft} className="button__icon"/></button>
-        <button className="manage__button" onClick={toggleDisplay}><FontAwesomeIcon icon={faUsers} className="button__icon"/></button>
+        <button className="manage__button" onClick={handleRedirect}>
+          <FontAwesomeIcon icon={faArrowLeft} className="button__icon"/>
+        </button>
+        <button className="manage__button" onClick={toggleDisplay}>
+          <FontAwesomeIcon icon={faUsers} className="button__icon"/>
+        </button>
       </div>
       {id &&
         <div className={`task-page__pop-up ${display ? "" : "hidden"}`}>

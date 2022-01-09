@@ -9,6 +9,7 @@
 
 .task-page__pop-up {
   width: 80%;
+  max-width: 750px;
   position: absolute;
   margin: 1rem 3rem 0;
   background-color: #8C8C8C;
@@ -28,6 +29,8 @@
 
 .task-page__manage {
   width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
   padding: 1rem 3rem 0;
   display: flex;
   justify-content: space-between;
@@ -51,6 +54,8 @@
 
 .task-page__section-name {
   width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
   padding-bottom: 0.5rem;
   padding-left: 3rem;
 }

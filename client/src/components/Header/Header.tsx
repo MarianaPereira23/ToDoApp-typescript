@@ -19,10 +19,12 @@ const Header: React.FC<Props> = ({ user, setUser }) => {
 
   return (
     <header className="header">
-      <button className="header__title" onClick={handleRedirect}>Task Tracker</button>
-      {typeof user !== 'string' &&
-      <button className="header__my-lists" onClick={handleLogout}>Logout</button>
-      }
+      <nav>
+        <button className="header__title" onClick={handleRedirect}>Task Tracker</button>
+        {typeof user !== 'string' &&
+        <button className="header__my-lists" onClick={handleLogout}>Logout</button>
+        }
+      </nav>
     </header>
   );
 };

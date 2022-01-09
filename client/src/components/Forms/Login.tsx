@@ -11,8 +11,8 @@ interface Props {
 
 const Login: React.FC<Props> = ({ user, setUser }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value);
 
@@ -45,7 +45,10 @@ const Login: React.FC<Props> = ({ user, setUser }) => {
         }
         <button className="form__button" type="submit">Login</button>
       </form>
-      <p className="login-page__sign-up">Not a member? <button className="sign-up__redirect" onClick={handleRedirect}>Sign-up</button></p>
+      <p className="login-page__sign-up">
+        Not a member? 
+        <button className="sign-up__redirect" onClick={handleRedirect}>Sign-up</button>
+      </p>
     </div>
   );
 };

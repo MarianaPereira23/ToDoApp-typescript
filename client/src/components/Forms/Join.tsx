@@ -11,9 +11,9 @@ interface Props {
 
 const Join: React.FC<Props> = ({ user, setUser }) => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.currentTarget.value);
 
@@ -31,7 +31,7 @@ const Join: React.FC<Props> = ({ user, setUser }) => {
     join(newUser.username, newUser.email, newUser.password, setUser);
   };
 
-  const handleRedirect = () => navigate('/join');
+  const handleRedirect = () => navigate('/login');
 
   useEffect(() => {
     if (typeof user === 'string') return;
@@ -50,7 +50,10 @@ const Join: React.FC<Props> = ({ user, setUser }) => {
         }
         <button className="form__button" type="submit">Sign-up</button>
       </form>
-      <p className="join-page__login">Already a member? <button className="join__redirect" onClick={handleRedirect}>Join</button></p>
+      <p className="join-page__login">
+        Already a member? 
+        <button className="join__redirect" onClick={handleRedirect}>Join</button>
+      </p>
     </div>
   );
 };
