@@ -1,60 +1,51 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+import { io, Socket } from "socket.io-client";
 import './Forms.css';
+
+const url = 'http://localhost:8080';
+
+const socket: Socket = io(url);
 
 interface Props {
   id: string;
+  setUserLists(lists: List[]): void;
   setDisplay(display: boolean): void;
-}
+};
 
-const ListUser: React.FC<Props> = ({ id, setDisplay }) => {
-  const [email, setEmail] = useState("");
-  const [type, setType] = useState("");
+const ListUser: React.FC<Props> = ({ id, setUserLists, setDisplay }) => {
+  const [email, setEmail] = useState<string>('');
 
-  const handleEmail = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setEmail(e.currentTarget.value);
-  };
+  socket.on('lists', (lists: List[]) => setUserLists(lists));
 
-  const handleSubmit = async () => {
-    const info = { email, id }
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value);
+
+  const handleSubmit = (type: string) => {
+    const info = { email, id };
     console.log(info);
-    console.log(type);
-    
+    if (info.email === '') {
+      return;
+    };
     if (type === 'Add') {
-      const addedData = await axios.put('http://localhost:8000/list/adduser', info);
-      if (addedData.data === "Sorry, a user with that email address does not seem to exist") {
-        // Error message to user!
-        console.log('User does not exist');
-        return;
-      }
-      setEmail("");
+      socket.emit('addListUser', info);
+      setEmail('');
       return setDisplay(false);
-    }
-    await axios.put('http://localhost:8000/list/removeuser', info);
-    setEmail("");
+    };
+    socket.emit('removeListUser', info);
+    setEmail('');
     return setDisplay(false);
-  }
-
-  const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setType('Add');
-    await handleSubmit();
   };
 
-  const handleRemove = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setType('Remove');
-    await handleSubmit();
-  };
+  const handleAdd = () => handleSubmit('Add');
+
+  const handleRemove = () => handleSubmit('Remove');
 
   return (
     <form className="pop-up__form">
       <label className="form__label">Manage list users</label>
-      <input className="form__input" type="email" placeholder="User email" required value={email} onChange={handleEmail}/>
+      <input className="form__input" type="email" placeholder="User email" value={email} onChange={handleEmail}/>
       <div className="form__button-container">
-        <button className="form__button" id="add" type="submit" onClick={handleAdd}>Add</button>
-        <button className="form__button" id="remove" type="submit" onClick={handleRemove}>Remove</button>
+        <button className="form__button" id="add" type="button" onClick={handleAdd}>Add</button>
+        <button className="form__button" id="remove" type="button" onClick={handleRemove}>Remove</button>
       </div>
     </form>
   );

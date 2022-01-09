@@ -30,8 +30,6 @@ export type UserList = {
   id: string;
 };
 
-export type UserLists = UserList[];
-
 export type ListUser = {
   email: string;
   id: string;

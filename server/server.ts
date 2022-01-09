@@ -6,7 +6,7 @@ import { config } from 'dotenv';
 import { addUser, getUser } from './usersdb';
 import { addList, getListByName, getUserLists, deleteList, addListUser, removeListUser, getList } from './listsdb';
 import { addTask, getTasks, findTask, deleteTask, toggleTask } from './tasksdb';
-import { User, ReturnUser, LoginUser, NewList, List, UserLists, ListUser, Task } from './types';
+import { User, ReturnUser, LoginUser, NewList, List, UserList, ListUser, Task } from './types';
 
 config();
 
@@ -73,7 +73,7 @@ io.on("connection", (socket: Socket) => {
   socket.on('getLists', async (user: ReturnUser) => {
     const lists = await getUserLists(user.email);
     if(lists && lists.length > 0) {
-      const userLists: UserLists = lists.map(list => {
+      const userLists: UserList[] = lists.map(list => {
         return ({
           name: list.name,
           id: list.id
@@ -88,7 +88,7 @@ io.on("connection", (socket: Socket) => {
     await deleteList(listId);
     const lists = await getUserLists(user.email);
     if(lists && lists.length > 0) {
-      const userLists: UserLists = lists.map(list => {
+      const userLists: UserList[] = lists.map(list => {
         return ({
           name: list.name,
           id: list.id
@@ -105,32 +105,10 @@ io.on("connection", (socket: Socket) => {
       return socket.emit('lists', 'Sorry, a user with that email address does not seem to exist');
     };
     await addListUser(user);
-    const lists = await getUserLists(user.email);
-    if(lists && lists.length > 0) {
-      const userLists: UserLists = lists.map(list => {
-        return ({
-          name: list.name,
-          id: list.id
-        });
-      });
-      return socket.emit('lists', userLists);
-    };
-    socket.emit('lists', []);
   });
 
   socket.on('removeListUser', async (user: ListUser) => {
     await removeListUser(user);
-    const lists = await getUserLists(user.email);
-    if(lists && lists.length > 0) {
-      const userLists: UserLists = lists.map(list => {
-        return ({
-          name: list.name,
-          id: list.id
-        });
-      });
-      return socket.emit('lists', userLists);
-    };
-    socket.emit('lists', []);
   });
 
   socket.on('getListName', async (id: string) => {
@@ -143,6 +121,8 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
+  socket.on('joinRoom', (id: string) => socket.join(id));
+
   socket.on('getTasks', async (id: string) => {
     const tasks = await getTasks(id);
     if (tasks && tasks.length > 0) {
@@ -154,18 +134,29 @@ io.on("connection", (socket: Socket) => {
           list_id: task.list_id
         });
       });
-      socket.emit('tasks', listTasks);
+      return io.in(id).emit('tasks', listTasks);
     };
-    socket.emit('tasks', []);
+    io.in(id).emit('tasks', []);
   });
 
-  socket.on('addTask', async (task: Task) => {
+  socket.on('addTask', async (task: Task, id: string) => {
     const dbTask = await findTask(task.name, task.list_id);
     if (typeof dbTask !== 'string') {
-      return socket.emit('tasks', 'Sorry, a task with that name already exists');
+      return io.in(id).emit('tasks', 'Sorry, a task with that name already exists');
     };
     await addTask(task);
-    socket.emit('newTask', task);
+    const tasks = await getTasks(id);
+    if (tasks && tasks.length > 0) {
+      const listTasks: Task[] = tasks.map(task => {
+        return ({
+          name: task.name,
+          description: task.description,
+          status: task.status,
+          list_id: task.list_id
+        });
+      });
+      return io.in(id).emit('tasks', listTasks);
+    };
   });
 
   socket.on('deleteTask', async (name: string, id: string) => {
@@ -180,20 +171,31 @@ io.on("connection", (socket: Socket) => {
           list_id: task.list_id
         });
       });
-      socket.emit('tasks', listTasks);
+      return io.in(id).emit('tasks', listTasks);
     };
-    socket.emit('tasks', []);
+    io.in(id).emit('tasks', []);
   });
 
-  socket.on('toggleTask', async (task: Task) => {
+  socket.on('toggleTask', async (task: Task, id: string) => {
     if (task.status === 'Pending') {
       await toggleTask(task.name, task.list_id, 'Done');
     };
     if (task.status === 'Done') {
       await toggleTask(task.name, task.list_id, 'Pending');
     };
-    const dbTask = await findTask(task.name, task.list_id);
-    socket.emit('tasks', dbTask);
+    const tasks = await getTasks(task.list_id);
+    if (tasks && tasks.length > 0) {
+      const listTasks: Task[] = tasks.map(task => {
+        return ({
+          name: task.name,
+          description: task.description,
+          status: task.status,
+          list_id: task.list_id
+        });
+      });
+      return io.in(id).emit('tasks', listTasks);
+    };
+    io.in(id).emit('tasks', []);
   });
 
 });

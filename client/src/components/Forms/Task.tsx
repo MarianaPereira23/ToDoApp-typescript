@@ -8,18 +8,15 @@ const socket: Socket = io(url);
 
 interface Props {
   id: string;
-  pendingTasks: Task[];
-  setPending(tasks: Task[]): void;
+  tasks: Task[];
+  setTasks(tasks: Task[]): void;
 }
 
-const Task: React.FC<Props> = ({ id, pendingTasks, setPending }) => {
+const Task: React.FC<Props> = ({ id, tasks, setTasks }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [descName, setDescName] = useState<string>('');
 
-  socket.on('newTask', (task: Task) => {
-    const newTasks: Task[] = pendingTasks.concat(task);
-    setPending(newTasks);
-  });
+  socket.on('tasks', (allTasks: Task[]) => setTasks(allTasks));
 
   const handleTaskName = (e: React.ChangeEvent<HTMLInputElement>) => setTaskName(e.currentTarget.value);
 
@@ -33,7 +30,7 @@ const Task: React.FC<Props> = ({ id, pendingTasks, setPending }) => {
       status: 'Pending',
       list_id: id
     };
-    socket.emit('addTask', taskInfo);
+    socket.emit('addTask', taskInfo, id);
     setTaskName('');
     setDescName('');
   };

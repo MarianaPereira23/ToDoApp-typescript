@@ -12,11 +12,12 @@ const socket: Socket = io(url);
 
 interface Props {
   user: User | string;
+  userLists: List[];
+  setUserLists(lists: List[]): void;
 };
 
-const Home: React.FC<Props> = ({ user }) => {
+const Home: React.FC<Props> = ({ user, userLists, setUserLists }) => {
   const navigate = useNavigate();
-  const [userLists, setUserLists] = useState<List[]>([]);
 
   socket.on('lists', (lists: List[]) => setUserLists(lists));
 
@@ -35,20 +36,20 @@ const Home: React.FC<Props> = ({ user }) => {
 
   return (
     <div className="home-page">
-    {typeof user !== 'string' &&
-      <>
-        <h2 className="home-page__user">{user.username}</h2>
-        <List user={user} userLists={userLists} setUserLists={setUserLists}/>
-        <div className="home-page__lists">
-          {userLists.length !== 0 &&
-            <p>Task lists</p>
-          }
-          {render()}
-        </div>
-      </>
-    }
-      </div>
-    );
+      {typeof user !== 'string' &&
+        <>
+          <h2 className="home-page__user">{user.username}</h2>
+          <List user={user} userLists={userLists} setUserLists={setUserLists}/>
+          <div className="home-page__lists">
+            {userLists.length !== 0 &&
+              <p>Task lists</p>
+            }
+            {render()}
+          </div>
+        </>
+      }
+    </div>
+  );
 };
 
 export default Home;

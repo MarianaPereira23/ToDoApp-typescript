@@ -10,6 +10,7 @@ import './App.css';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<User | string>('');
+  const [userLists, setUserLists] = useState<List[]>([]);
 
   return (
     <div className="todo-app">
@@ -18,7 +19,7 @@ const App: React.FC = () => {
           <Route path="/" element={(
             <>
               <Header user={user} setUser={setUser}/>
-              <Home user={user}/>
+              <Home user={user} userLists={userLists} setUserLists={setUserLists}/>
               <Footer />
             </>
           )} />
@@ -39,7 +40,7 @@ const App: React.FC = () => {
           <Route path="/list/:id" element={(
             <>
               <Header user={user} setUser={setUser}/>
-              <TaskList user={user}/>
+              <TaskList user={user} setUserLists={setUserLists}/>
               <Footer />
             </>
           )} />
