@@ -21,6 +21,10 @@
   margin-top: 0.1rem;
 }
 
+.task-card__checkbox:hover {
+  cursor: pointer;
+}
+
 .task-card__right {
   width: 90%;
 }

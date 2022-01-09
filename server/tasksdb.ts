@@ -18,6 +18,7 @@ export const findTask = async (name: string, list_id: string) => {
     return task;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -30,6 +31,7 @@ export const addTask = async (task: Task) => {
     return "Task added";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -42,6 +44,7 @@ export const getTasks = async (id: string) => {
     return tasks;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -54,6 +57,7 @@ export const deleteTask = async (name: string, list_id: string) => {
     return "Task Removed";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -66,6 +70,7 @@ export const toggleTask = async (name: string, list_id: string, status: string) 
     return "Task Updated";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };

@@ -7,6 +7,10 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .todo-app {
   width: 100vw;
   height: 100%;

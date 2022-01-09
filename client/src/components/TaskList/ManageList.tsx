@@ -7,14 +7,19 @@ import './TaskList.css';
 
 interface Props {
   id: string;
-  setUserLists(lists: List[]): void;
 };
 
-const ManageList: React.FC<Props> = ({ id, setUserLists }) => {
+const ManageList: React.FC<Props> = ({ id }) => {
   const navigate = useNavigate();
   const [display, setDisplay] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   const toggleDisplay = () => setDisplay(!display);
+
+  const closeDisplay = () => {
+    setDisplay(false);
+    setError('');
+  };
 
   const handleRedirect = () => navigate('/');
 
@@ -30,8 +35,8 @@ const ManageList: React.FC<Props> = ({ id, setUserLists }) => {
       </div>
       {id &&
         <div className={`task-page__pop-up ${display ? "" : "hidden"}`}>
-          <button className="pop-up__close" onClick={toggleDisplay}>X</button>
-          <ListUser id={id} setDisplay={setDisplay} setUserLists={setUserLists}/>
+          <button className="pop-up__close" onClick={closeDisplay}>X</button>
+          <ListUser id={id} setDisplay={setDisplay} error={error} setError={setError}/>
         </div>
       }
     </>

@@ -10,15 +10,18 @@ interface Props {
   user: User | string;
   userLists: List[];
   setUserLists(lists: List[]): void;
-}
+};
 
 const List: React.FC<Props> = ({ user, userLists, setUserLists }) => {
   const [listName, setListName] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   socket.on('newList', (list: List) => {
     const newLists: List[] = userLists.concat(list);
     setUserLists(newLists);
   });
+
+  socket.on('listError', (error: string) => setError(error));
 
   const handleListName = (e: React.ChangeEvent<HTMLInputElement>) => setListName(e.currentTarget.value);
 
@@ -31,6 +34,7 @@ const List: React.FC<Props> = ({ user, userLists, setUserLists }) => {
       };
       socket.emit('createList', listInfo);
       setListName('');
+      setError('');
     };
   };
 
@@ -38,6 +42,7 @@ const List: React.FC<Props> = ({ user, userLists, setUserLists }) => {
     <form className="home-page__form" onSubmit={handleSubmit}>
       <label className="form__label">Create new task list</label>
       <input className="form__input" type="text" placeholder="List name" value={listName} required onChange={handleListName} />
+      <p className="error">{error}</p>
       <button className="form__button" type="submit">Create</button>
     </form>
   );

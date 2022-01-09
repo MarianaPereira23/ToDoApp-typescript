@@ -15,6 +15,7 @@ export const addList = async (list: List) => {
     return "List added";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -30,6 +31,7 @@ export const getListByName = async (name: string, email: string) => {
     return list;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -42,6 +44,7 @@ export const getUserLists = async (email: string) => {
     return lists;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -54,6 +57,7 @@ export const deleteList = async (id: string) => {
     return "List Removed";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -69,6 +73,7 @@ export const addListUser = async (listUser: ListUser) => {
     await client.close();
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -84,6 +89,7 @@ export const removeListUser = async (listUser: ListUser) => {
     await client.close();
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -99,6 +105,7 @@ export const getList = async (id: string) => {
     return list;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };

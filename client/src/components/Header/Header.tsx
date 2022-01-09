@@ -5,7 +5,7 @@ import './Header.css';
 interface Props {
   user: User | string;
   setUser(user: User | string): void;
-}
+};
 
 const Header: React.FC<Props> = ({ user, setUser }) => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Header: React.FC<Props> = ({ user, setUser }) => {
   const handleLogout = () => {
     setUser('');
     navigate('/login');
-  }
+  };
 
   return (
     <header className="header">

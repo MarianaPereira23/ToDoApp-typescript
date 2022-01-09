@@ -8,12 +8,9 @@ const socket: Socket = io(url);
 
 interface Props {
   task: Task;
-  setTasks(tasks: Task[]): void;
 };
 
-const TaskCard: React.FC<Props> = ({ task, setTasks }) => {
-  socket.on('tasks', (allTasks: Task[]) => setTasks(allTasks));
-
+const TaskCard: React.FC<Props> = ({ task }) => {
   const handleStatusChange = () => socket.emit('toggleTask', task, task.list_id);
 
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => socket.emit('deleteTask', task.name, task.list_id);

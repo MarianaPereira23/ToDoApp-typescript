@@ -8,15 +8,14 @@ const socket: Socket = io(url);
 
 interface Props {
   id: string;
-  tasks: Task[];
-  setTasks(tasks: Task[]): void;
-}
+};
 
-const Task: React.FC<Props> = ({ id, tasks, setTasks }) => {
+const Task: React.FC<Props> = ({ id }) => {
   const [taskName, setTaskName] = useState<string>('');
   const [descName, setDescName] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
-  socket.on('tasks', (allTasks: Task[]) => setTasks(allTasks));
+  socket.on('taskError', (error: string) => setError(error));
 
   const handleTaskName = (e: React.ChangeEvent<HTMLInputElement>) => setTaskName(e.currentTarget.value);
 
@@ -33,6 +32,7 @@ const Task: React.FC<Props> = ({ id, tasks, setTasks }) => {
     socket.emit('addTask', taskInfo, id);
     setTaskName('');
     setDescName('');
+    setError('');
   };
 
   return (
@@ -40,6 +40,7 @@ const Task: React.FC<Props> = ({ id, tasks, setTasks }) => {
       <label className="form__label">Create new task</label>
       <input className="form__input" type="text" placeholder="Task name" value={taskName} required onChange={handleTaskName} />
       <input className="form__input" type="text" placeholder="Task description" value={descName} onChange={handleDescName} />
+      <p className="error">{error}</p>
       <button className="form__button" id ="task__button" type="submit">Add</button>
     </form>
   );

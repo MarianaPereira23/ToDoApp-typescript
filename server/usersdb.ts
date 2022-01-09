@@ -15,6 +15,7 @@ export const addUser = async (user: User) => {
     return "User added";
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };
@@ -30,6 +31,7 @@ export const getUser = async (email: string) => {
     return dbUser;
   } catch (err) {
     await client.close();
+    console.log(err);
     return;
   };
 };

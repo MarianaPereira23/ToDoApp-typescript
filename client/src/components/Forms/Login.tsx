@@ -7,7 +7,7 @@ import './Forms.css';
 interface Props {
   user: User | string;
   setUser(user: User | string): void;
-}
+};
 
 const Login: React.FC<Props> = ({ user, setUser }) => {
   const navigate = useNavigate();

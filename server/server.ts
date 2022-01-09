@@ -24,6 +24,38 @@ const hash = async (password: string) => {
   return hashedPassword;
 };
 
+const findLists = async (email: string) => {
+  const lists = await getUserLists(email);
+  if(lists && lists.length > 0) {
+    const userLists: UserList[] = lists.map(list => {
+      return ({
+        name: list.name,
+        id: list.id
+      });
+    });
+    return userLists;
+  };
+  const userLists: UserList[] = [];
+  return userLists;
+};
+
+const findTasks = async (id: string) => {
+  const tasks = await getTasks(id);
+  if (tasks && tasks.length > 0) {
+    const listTasks: Task[] = tasks.map(task => {
+      return ({
+        name: task.name,
+        description: task.description,
+        status: task.status,
+        list_id: task.list_id
+      });
+    });
+    return listTasks;
+  };
+  const listTasks: Task[] = [];
+  return listTasks;
+};
+
 io.on("connection", (socket: Socket) => {
 
   socket.on('join', async (user: User) => {
@@ -64,52 +96,32 @@ io.on("connection", (socket: Socket) => {
     };
     const existingList = await getListByName(listToAdd.name, listData.user);
     if (typeof existingList !== 'string') {
-      return socket.emit('list', 'You already hava list with that name');
+      return socket.emit('listError', 'You already hava list with that name');
     };
     await addList(listToAdd);
     socket.emit('newList', listToAdd);
   });
 
   socket.on('getLists', async (user: ReturnUser) => {
-    const lists = await getUserLists(user.email);
-    if(lists && lists.length > 0) {
-      const userLists: UserList[] = lists.map(list => {
-        return ({
-          name: list.name,
-          id: list.id
-        });
-      });
-      return socket.emit('lists', userLists);
-    };
-    socket.emit('lists', []);
+    const lists: UserList[] = await findLists(user.email);
+    socket.emit('lists', lists);
   });
 
   socket.on('deleteList', async (listId: string, user: ReturnUser) => {
     await deleteList(listId);
-    const lists = await getUserLists(user.email);
-    if(lists && lists.length > 0) {
-      const userLists: UserList[] = lists.map(list => {
-        return ({
-          name: list.name,
-          id: list.id
-        });
-      });
-      return socket.emit('lists', userLists);
-    };
-    socket.emit('lists', []);
+    const lists: UserList[] = await findLists(user.email);
+    socket.emit('lists', lists);
   });
 
   socket.on('addListUser', async (user: ListUser) => {
     const dbUser = await getUser(user.email);
     if (typeof dbUser === 'string') {
-      return socket.emit('lists', 'Sorry, a user with that email address does not seem to exist');
+      return socket.emit('userListError', 'Sorry, a user with that email address does not seem to exist');
     };
     await addListUser(user);
   });
 
-  socket.on('removeListUser', async (user: ListUser) => {
-    await removeListUser(user);
-  });
+  socket.on('removeListUser', async (user: ListUser) => await removeListUser(user));
 
   socket.on('getListName', async (id: string) => {
     const list = await getList(id);
@@ -124,56 +136,24 @@ io.on("connection", (socket: Socket) => {
   socket.on('joinRoom', (id: string) => socket.join(id));
 
   socket.on('getTasks', async (id: string) => {
-    const tasks = await getTasks(id);
-    if (tasks && tasks.length > 0) {
-      const listTasks: Task[] = tasks.map(task => {
-        return ({
-          name: task.name,
-          description: task.description,
-          status: task.status,
-          list_id: task.list_id
-        });
-      });
-      return io.in(id).emit('tasks', listTasks);
-    };
-    io.in(id).emit('tasks', []);
+    const tasks: Task[] = await findTasks(id);
+    io.in(id).emit('tasks', tasks);
   });
 
   socket.on('addTask', async (task: Task, id: string) => {
     const dbTask = await findTask(task.name, task.list_id);
     if (typeof dbTask !== 'string') {
-      return io.in(id).emit('tasks', 'Sorry, a task with that name already exists');
+      return socket.emit('taskError', 'Sorry, a task with that name already exists');
     };
     await addTask(task);
-    const tasks = await getTasks(id);
-    if (tasks && tasks.length > 0) {
-      const listTasks: Task[] = tasks.map(task => {
-        return ({
-          name: task.name,
-          description: task.description,
-          status: task.status,
-          list_id: task.list_id
-        });
-      });
-      return io.in(id).emit('tasks', listTasks);
-    };
+    const tasks: Task[] = await findTasks(id);
+    io.in(id).emit('tasks', tasks);
   });
 
   socket.on('deleteTask', async (name: string, id: string) => {
     await deleteTask(name, id);
-    const tasks = await getTasks(id);
-    if (tasks && tasks.length > 0) {
-      const listTasks: Task[] = tasks.map(task => {
-        return ({
-          name: task.name,
-          description: task.description,
-          status: task.status,
-          list_id: task.list_id
-        });
-      });
-      return io.in(id).emit('tasks', listTasks);
-    };
-    io.in(id).emit('tasks', []);
+    const tasks: Task[] = await findTasks(id);
+    io.in(id).emit('tasks', tasks);
   });
 
   socket.on('toggleTask', async (task: Task, id: string) => {
@@ -183,19 +163,8 @@ io.on("connection", (socket: Socket) => {
     if (task.status === 'Done') {
       await toggleTask(task.name, task.list_id, 'Pending');
     };
-    const tasks = await getTasks(task.list_id);
-    if (tasks && tasks.length > 0) {
-      const listTasks: Task[] = tasks.map(task => {
-        return ({
-          name: task.name,
-          description: task.description,
-          status: task.status,
-          list_id: task.list_id
-        });
-      });
-      return io.in(id).emit('tasks', listTasks);
-    };
-    io.in(id).emit('tasks', []);
+    const tasks: Task[] = await findTasks(id);
+    io.in(id).emit('tasks', tasks);
   });
 
 });

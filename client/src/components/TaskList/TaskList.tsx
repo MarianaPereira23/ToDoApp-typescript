@@ -26,7 +26,7 @@ const TaskList: React.FC<Props> = ({ user, setUserLists }) => {
 
   const render = (todos: Task[]) => {
     if (tasks.length !== 0) {
-      return todos.map((task, i) => <TaskCard key={i} task={task} setTasks={setTasks} />);
+      return todos.map((task, i) => <TaskCard key={i} task={task}/>);
     };
   };
 
@@ -50,9 +50,9 @@ const TaskList: React.FC<Props> = ({ user, setUserLists }) => {
     <div className="task-page">
       {id &&
         <>
-          <ManageList id={id} setUserLists={setUserLists}/>
-          <ListName id={id}/>
-          <Task id={id} tasks={tasks} setTasks={setTasks}/>
+          <ManageList id={id} />
+          <ListName id={id} />
+          <Task id={id} />
         </>
       }
       {pendingTasks.length > 0 && 
