@@ -181,4 +181,4 @@ io.on("connection", (socket: Socket) => {
 
 const PORT = process.env.PORT || 8080;
 
-httpServer.listen(8080);
+httpServer.listen(PORT);
