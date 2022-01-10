@@ -53,7 +53,7 @@ const ManageList: React.FC<Props> = ({ id }) => {
           {users.length > 0 &&
             <>
               <p className="pop-up__users">Users with access to this list:</p>
-              {users.map(user => <p>- {user}</p>)}
+              {users.map((user, i) => <p key={i}>- {user}</p>)}
             </>
           }
         </div>
