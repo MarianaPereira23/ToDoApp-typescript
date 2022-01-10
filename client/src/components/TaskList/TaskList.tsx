@@ -14,10 +14,9 @@ const socket: Socket = io(url);
 
 interface Props {
   user: User | string;
-  setUserLists(lists: List[]): void;
 };
 
-const TaskList: React.FC<Props> = ({ user, setUserLists }) => {
+const TaskList: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
   const id: string | undefined = useParams().id;
   const [tasks, setTasks] = useState<Task[]>([]);

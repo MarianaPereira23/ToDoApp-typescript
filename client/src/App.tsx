@@ -40,7 +40,7 @@ const App: React.FC = () => {
           <Route path="/list/:id" element={(
             <>
               <Header user={user} setUser={setUser}/>
-              <TaskList user={user} setUserLists={setUserLists}/>
+              <TaskList user={user}/>
               <Footer />
             </>
           )} />
