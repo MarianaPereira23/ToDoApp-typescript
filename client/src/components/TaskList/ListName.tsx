@@ -14,9 +14,7 @@ interface Props {
 const ListName: React.FC<Props> = ({ id }) => {
   const [listName, setListName] = useState<string>('');
 
-  socket.on('listName', (name: string) => {
-    setListName(name);
-  });
+  socket.on('listName', (name: string) => setListName(name));
 
   useEffect(() => {
     socket.emit('getListName', id);

@@ -1,9 +1,17 @@
-import React, {useState} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
+import { io, Socket } from "socket.io-client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import ListUser from '../Forms/ListUser';
 import './TaskList.css';
+
+// const url = 'https://todo-typescript-server.herokuapp.com/';
+
+const url = 'http://localhost:8080/';
+
+const socket: Socket = io(url);
 
 interface Props {
   id: string;
@@ -13,6 +21,9 @@ const ManageList: React.FC<Props> = ({ id }) => {
   const navigate = useNavigate();
   const [display, setDisplay] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [users, setUsers] = useState<string[]>([]);
+
+  socket.on('listUsers', (listUsers: string[]) => setUsers(listUsers));
 
   const toggleDisplay = () => setDisplay(!display);
 
@@ -22,6 +33,10 @@ const ManageList: React.FC<Props> = ({ id }) => {
   };
 
   const handleRedirect = () => navigate('/');
+
+  useEffect(() => {
+    socket.emit('getListUsers', id);
+  }, []);
 
   return (
     <>
@@ -37,6 +52,12 @@ const ManageList: React.FC<Props> = ({ id }) => {
         <div className={`task-page__pop-up ${display ? "" : "hidden"}`}>
           <button className="pop-up__close" onClick={closeDisplay}>X</button>
           <ListUser id={id} setDisplay={setDisplay} error={error} setError={setError}/>
+          {users.length > 0 &&
+            <>
+              <p className="pop-up__users">Users with access to this list:</p>
+              {users.map(user => <p>- {user}</p>)}
+            </>
+          }
         </div>
       }
     </>

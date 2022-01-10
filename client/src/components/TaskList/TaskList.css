@@ -7,6 +7,15 @@
   position: relative;
 }
 
+.task-page__manage {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1rem 3rem 0;
+  display: flex;
+  justify-content: space-between;
+}
+
 .task-page__pop-up {
   width: 80%;
   max-width: 750px;
@@ -27,15 +36,6 @@
   border: none;
 }
 
-.task-page__manage {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 1rem 3rem 0;
-  display: flex;
-  justify-content: space-between;
-}
-
 .button__icon {
   font-size: 1.4rem;
   color: #0360CD;
@@ -44,6 +44,10 @@
 .manage__button {
   background-color: transparent;
   border: none;
+}
+
+.pop-up__users {
+  padding: 1rem 0 0.5rem;
 }
 
 .task-page__list-name {
