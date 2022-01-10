@@ -7,6 +7,7 @@ Backend:
 - Socket.io;
 - MongoDB;
 - Express;
+
 Frontend:
 - React;
 - Typescript;
