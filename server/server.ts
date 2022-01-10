@@ -123,6 +123,16 @@ io.on("connection", (socket: Socket) => {
 
   socket.on('removeListUser', async (user: ListUser) => await removeListUser(user));
 
+  socket.on('getListUsers', async (id: string) => {
+    const list = await getList(id);
+    if (typeof list === 'string') {
+      return socket.emit('listUsers', list);
+    };
+    if (list) {
+      return socket.emit('listUsers', list.users);
+    };
+  });
+
   socket.on('getListName', async (id: string) => {
     const list = await getList(id);
     if (typeof list === 'string') {
@@ -130,7 +140,7 @@ io.on("connection", (socket: Socket) => {
     };
     if (list) {
       return socket.emit('listName', list.name);
-    }
+    };
   });
 
   socket.on('joinRoom', (id: string) => socket.join(id));
@@ -171,4 +181,4 @@ io.on("connection", (socket: Socket) => {
 
 const PORT = process.env.PORT || 8080;
 
-httpServer.listen(PORT);
+httpServer.listen(8080);
