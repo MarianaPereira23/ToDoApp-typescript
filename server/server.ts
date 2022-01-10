@@ -169,4 +169,6 @@ io.on("connection", (socket: Socket) => {
 
 });
 
-httpServer.listen('https://todo-typescript-server.herokuapp.com/');
+const PORT = process.env.PORT || 8080;
+
+httpServer.listen(PORT);
