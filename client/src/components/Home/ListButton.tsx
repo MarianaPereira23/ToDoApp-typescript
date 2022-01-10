@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { io, Socket } from "socket.io-client";
 import './Home.css';
 
-const url = 'http://localhost:8080';
+const url = 'https://todo-typescript-server.herokuapp.com/';
 
 const socket: Socket = io(url);
 

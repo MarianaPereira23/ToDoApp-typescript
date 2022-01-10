@@ -8,7 +8,7 @@ import ListName from './ListName';
 import ManageList from './ManageList';
 import './TaskList.css';
 
-const url = 'http://localhost:8080';
+const url = 'https://todo-typescript-server.herokuapp.com/';
 
 const socket: Socket = io(url);
 

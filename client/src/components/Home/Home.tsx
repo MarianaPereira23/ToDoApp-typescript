@@ -6,7 +6,7 @@ import List from '../Forms/List';
 import ListButton from './ListButton';
 import './Home.css';
 
-const url = 'http://localhost:8080';
+const url = 'https://todo-typescript-server.herokuapp.com/';
 
 const socket: Socket = io(url);
 
