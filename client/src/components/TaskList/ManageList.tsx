@@ -7,9 +7,7 @@ import { faArrowLeft, faUsers } from '@fortawesome/free-solid-svg-icons';
 import ListUser from '../Forms/ListUser';
 import './TaskList.css';
 
-// const url = 'https://todo-typescript-server.herokuapp.com/';
-
-const url = 'http://localhost:8080/';
+const url = 'https://todo-typescript-server.herokuapp.com/';
 
 const socket: Socket = io(url);
 
